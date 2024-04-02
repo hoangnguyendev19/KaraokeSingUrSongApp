@@ -311,7 +311,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 		cboNumberPeople.addItemListener(this);
 		cboPrice.addItemListener(this);
 		
-		if(!nhanvien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nhanvien.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			btnThem.removeActionListener(this);
 			btnXoa.removeActionListener(this);
 			

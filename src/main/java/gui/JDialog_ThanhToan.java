@@ -801,7 +801,7 @@ public class JDialog_ThanhToan extends JFrame implements ActionListener, MouseLi
 									DAO_chiTietDV = new ChiTietDichVu_DAO();
 									Phong phongDV = new Phong(ma);
 									ChiTietDichVu ctdvNew = new ChiTietDichVu(hoaDonNew, ctdv.getDichVu(),
-											ctdv.getSoLuong(), phongDV);
+											 phongDV, ctdv.getSoLuong());
 
 									// Tạo và lưu CTDV mới
 									DAO_chiTietDV.taoCTDichVu(ctdvNew);

@@ -1,47 +1,56 @@
 package entity;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
-import org.openxmlformats.schemas.wordprocessingml.x2006.main.HdrDocument;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-/**
- * HoaDon trangThai:
- * 
- * 
- */
+@Entity
+@Table(name = "HoaDon")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "maHoaDon")
 public class HoaDon {
-	// Danh sách "ChiTietDichVu" và "ChiTietHoaDon"
-
+    @Id
+    @Column(name = "maHoaDon", columnDefinition = "NCHAR(15)")
 	private String maHoaDon;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maKhachHang", columnDefinition = "NCHAR(16)", nullable = false)
 	private KhachHang khachHang;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maNhanVien", columnDefinition = "NCHAR(16)", nullable = false)
 	private NhanVien nhanVien;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maPhieuDat", columnDefinition = "NCHAR(15)", nullable = false)
 	private PhieuDatPhong phieuDatPhong;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "maKhuyenMai", columnDefinition = "NCHAR(16)", nullable = false)
 	private KhuyenMai khuyenMai;
 	private Timestamp ngayLap;
+	@Column(name = "trangThai", columnDefinition = "NVARCHAR(40)")
 	private String trangThai;
 	private Timestamp thoiGianKetThuc;
 
-	public HoaDon() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public HoaDon(String maHoaDon, KhachHang khachHang, NhanVien nhanVien, PhieuDatPhong phieuDatPhong,
-			KhuyenMai khuyenMai, Timestamp ngayLap, String trangThai, Timestamp thoiGianKetThuc) {
+	public HoaDon(String maHoaDon) {
 		super();
 		this.maHoaDon = maHoaDon;
-		this.khachHang = khachHang;
-		this.nhanVien = nhanVien;
-		this.phieuDatPhong = phieuDatPhong;
-		this.khuyenMai = khuyenMai;
-		this.ngayLap = ngayLap;
-		this.trangThai = trangThai;
-		this.thoiGianKetThuc = thoiGianKetThuc;
 	}
 
 	public float tinhGioHat() {
@@ -84,75 +93,6 @@ public class HoaDon {
 
 	}
 
-	public HoaDon(String maHoaDon) {
-		super();
-		this.maHoaDon = maHoaDon;
-	}
-
-	public String getMaHoaDon() {
-		return maHoaDon;
-	}
-
-	public void setMaHoaDon(String maHoaDon) {
-		this.maHoaDon = maHoaDon;
-	}
-
-	public KhachHang getKhachHang() {
-		return khachHang;
-	}
-
-	public void setKhachHang(KhachHang khachHang) {
-		this.khachHang = khachHang;
-	}
-
-	public NhanVien getNhanVien() {
-		return nhanVien;
-	}
-
-	public void setNhanVien(NhanVien nhanVien) {
-		this.nhanVien = nhanVien;
-	}
-
-	public PhieuDatPhong getPhieuDatPhong() {
-		return phieuDatPhong;
-	}
-
-	public void setPhieuDatPhong(PhieuDatPhong phieuDatPhong) {
-		this.phieuDatPhong = phieuDatPhong;
-	}
-
-	public KhuyenMai getKhuyenMai() {
-		return khuyenMai;
-	}
-
-	public void setKhuyenMai(KhuyenMai khuyenMai) {
-		this.khuyenMai = khuyenMai;
-	}
-
-	public Timestamp getNgayLap() {
-		return ngayLap;
-	}
-
-	public void setNgayLap(Timestamp ngayLap) {
-		this.ngayLap = ngayLap;
-	}
-
-	public String getTrangThai() {
-		return trangThai;
-	}
-
-	public void setTrangThai(String trangThai) {
-		this.trangThai = trangThai;
-	}
-
-	public Timestamp getThoiGianKetThuc() {
-		return thoiGianKetThuc;
-	}
-
-	public void setThoiGianKetThuc(Timestamp thoiGianKetThuc) {
-		this.thoiGianKetThuc = thoiGianKetThuc;
-	}
-
 	public long tinhTienPhong(ArrayList<ChiTietHoaDon> dsCTHD) {
 		long sum = 0;
 		for (ChiTietHoaDon chiTietHoaDon : dsCTHD) {
@@ -181,13 +121,6 @@ public class HoaDon {
 		}
 
 		return sum * 1.05;
-	}
-
-	@Override
-	public String toString() {
-		return "HoaDon [maHoaDon=" + maHoaDon + ", khachHang=" + khachHang + ", nhanVien=" + nhanVien
-				+ ", phieuDatPhong=" + phieuDatPhong + ", khuyenMai=" + khuyenMai + ", ngayLap=" + ngayLap
-				+ ", trangThai=" + trangThai + ", thoiGianKetThuc=" + thoiGianKetThuc + "]";
 	}
 
 }

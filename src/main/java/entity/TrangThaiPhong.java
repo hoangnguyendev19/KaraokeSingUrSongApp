@@ -1,63 +1,34 @@
 package entity;
 
-import java.util.Objects;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-/**
- * Trạng thái phòng
- * @author THANH CUONG
- *
- */
+@Entity
+@Table(name = "TrangThaiPhong")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "maTrangThai")
 public class TrangThaiPhong {
+	@Id
+	@Column(name = "maTrangThai", columnDefinition = "NCHAR(16)")
 	private String maTrangThai;
+	@Column(name = "tenTrangThai", columnDefinition = "NVARCHAR(40)")
 	private String tenTrangThai;
-	public TrangThaiPhong() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	/**
-	 * @param maTrangThai
-	 * @param tenTrangThai
-	 */
-	public TrangThaiPhong(String maTrangThai, String tenTrangThai) {
-		super();
-		this.maTrangThai = maTrangThai;
-		this.tenTrangThai = tenTrangThai;
-	}
+	
 	public TrangThaiPhong(String maTrangThai) {
 		super();
 		this.maTrangThai = maTrangThai;
 	}
-	public String getMaTrangThai() {
-		return maTrangThai;
-	}
-	public void setMaTrangThai(String maTrangThai) {
-		this.maTrangThai = maTrangThai;
-	}
-	public String getTenTrangThai() {
-		return tenTrangThai;
-	}
-	public void setTenTrangThai(String tenTrangThai) {
-		this.tenTrangThai = tenTrangThai;
-	}
-	@Override
-	public int hashCode() {
-		return Objects.hash(maTrangThai);
-	}
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		TrangThaiPhong other = (TrangThaiPhong) obj;
-		return Objects.equals(maTrangThai, other.maTrangThai);
-	}
-	@Override
-	public String toString() {
-		return "TrangThaiPhong [maTrangThai=" + maTrangThai + ", tenTrangThai=" + tenTrangThai + "]";
-	}
-	
 	
 }

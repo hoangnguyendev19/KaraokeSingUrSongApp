@@ -53,7 +53,7 @@ public class HelpRamDomMaPhong {
 	public static ArrayList<String> maToDaTaBase() {
 		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
 		String user = "sa";
-		String password = "230903";
+		String password = "sapassword";
 		String maPhong = "";
 		
 		 ArrayList<String> maCot = new ArrayList<>();

@@ -226,7 +226,7 @@ public class NhanVien_DAO {
 		try {
 			statement = con.prepareStatement("INSERT INTO NhanVien values(?,?,?,?,?,?,?,?,?,?)");
 			statement.setString(1, nhanVien.getMaNhanVien());
-			statement.setString(2, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
+			statement.setString(2, nhanVien.getLoaiNhanVien().getMaLoaiNhanVien());
 			statement.setString(3, nhanVien.getHoTen());
 			statement.setBoolean(4, nhanVien.isGioiTinh());
 			statement.setDate(5, (java.sql.Date) nhanVien.getNgaySinh());
@@ -264,7 +264,7 @@ public class NhanVien_DAO {
 			statement = con.prepareStatement(
 					"UPDATE NhanVien SET maLoaiNhanVien = ?, hoTen =?, gioiTinh=?, ngaySinh=?, soDienThoai=?, CCCD=?, diaChi=?, trangThai=?, anhThe=?"
 							+ " WHERE maNhanVien=?");
-			statement.setString(1, nhanVien.getloaiNhanVien().getMaLoaiNhanVien());
+			statement.setString(1, nhanVien.getLoaiNhanVien().getMaLoaiNhanVien());
 			statement.setString(2, nhanVien.getHoTen());
 			statement.setBoolean(3, nhanVien.isGioiTinh());
 			statement.setDate(4, (java.sql.Date) nhanVien.getNgaySinh());

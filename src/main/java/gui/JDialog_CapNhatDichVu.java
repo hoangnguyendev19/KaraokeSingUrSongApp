@@ -221,7 +221,7 @@ public class JDialog_CapNhatDichVu extends JFrame {
 
 		cbox_trangThai.addItem("Còn hàng");
 		cbox_trangThai.addItem("Hết hàng");
-		cbox_trangThai.setSelectedItem(dv.getTrangThai());
+		cbox_trangThai.setSelectedItem(dv.isTrangThai());
 
 		cbox_trangThai.setBounds(126, 3, 224, 25);
 		pnl_GiaTien_1.add(cbox_trangThai);

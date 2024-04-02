@@ -404,7 +404,7 @@ public class JDialog_TrangCaNhan extends JFrame implements ActionListener, ItemL
 
 		DAO_LNV = new LoaiNhanVien_DAO();
 		LoaiNhanVien LNV = new LoaiNhanVien();
-		LNV = DAO_LNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+		LNV = DAO_LNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getLoaiNhanVien().getMaLoaiNhanVien());
 
 		TK = new TaiKhoan();
 		DAO_TK = new TaiKhoan_DAO();

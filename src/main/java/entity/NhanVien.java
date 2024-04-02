@@ -1,166 +1,54 @@
 package entity;
 
 import java.sql.Date;
-import java.util.Objects;
 
-/**
- * NhanVien
- * @author THANH CUONG
- *
- */
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@Table(name = "NhanVien")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "maNhanVien")
 public class NhanVien {
+	@Id
+	@Column(name = "maNhanVien", columnDefinition = "NCHAR(16)")
 	private String maNhanVien;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "maLoaiNhanVien", columnDefinition = "NCHAR(16)", nullable = false)
 	private LoaiNhanVien loaiNhanVien;
+	@Column(name = "hoTen", columnDefinition = "NVARCHAR(40)")
 	private String hoTen;
 	private boolean gioiTinh;
 	private Date ngaySinh;
+	@Column(name = "soDienThoai", columnDefinition = "NCHAR(10)")
 	private String soDienThoai;
+	@Column(name = "CCCD", columnDefinition = "NCHAR(12)")
 	private String CCCD;
+	@Column(name = "diaChi", columnDefinition = "NVARCHAR(40)")
 	private String diaChi;
+	@Column(name = "trangThai", columnDefinition = "NVARCHAR(40)")
 	private String trangThai;
+	@Column(name = "anhThe", columnDefinition = "NCHAR(100)")
 	private String anhThe;
-	
-	public NhanVien() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 	
 	public NhanVien(String maNhanVien) {
 		super();
 		this.maNhanVien = maNhanVien;
 	}
-
-	public String getMaNhanVien() {
-		return maNhanVien;
-	}
-
-	/**
-	 * @param maNhanVien
-	 * @param loaiNhanVien
-	 * @param hoTen
-	 * @param gioiTinh
-	 * @param ngaySinh
-	 * @param soDienThoai
-	 * @param cCCD
-	 * @param diaChi
-	 * @param trangThai
-	 * @param anhThe
-	 * @param tenDangNhap
-	 */
-	public NhanVien(String maNhanVien, LoaiNhanVien loaiNhanVien, String hoTen, boolean gioiTinh, Date ngaySinh,
-			String soDienThoai, String cCCD, String diaChi, String trangThai, String anhThe) {
-		super();
-		this.maNhanVien = maNhanVien;
-		this.loaiNhanVien = loaiNhanVien;
-		this.hoTen = hoTen;
-		this.gioiTinh = gioiTinh;
-		this.ngaySinh = ngaySinh;
-		this.soDienThoai = soDienThoai;
-		this.CCCD = cCCD;
-		this.diaChi = diaChi;
-		this.trangThai = trangThai;
-		this.anhThe = anhThe;
-	}
-
-	public void setMaNhanVien(String maNhanVien) {
-		this.maNhanVien = maNhanVien;
-	}
-
-	public LoaiNhanVien getloaiNhanVien() {
-		return loaiNhanVien;
-	}
-
-	public void setloaiNhanVien(LoaiNhanVien loaiNhanVien) {
-		this.loaiNhanVien = loaiNhanVien;
-	}
-
-	public String getHoTen() {
-		return hoTen;
-	}
-
-	public void setHoTen(String hoTen) {
-		this.hoTen = hoTen;
-	}
-
-	public boolean isGioiTinh() {
-		return gioiTinh;
-	}
-
-	public void setGioiTinh(boolean gioiTinh) {
-		this.gioiTinh = gioiTinh;
-	}
-
-	public Date getNgaySinh() {
-		return ngaySinh;
-	}
-
-	public void setNgaySinh(Date ngaySinh) {
-		this.ngaySinh = ngaySinh;
-	}
-
-	public String getSoDienThoai() {
-		return soDienThoai;
-	}
-
-	public void setSoDienThoai(String soDienThoai) {
-		this.soDienThoai = soDienThoai;
-	}
-
-	public String getCCCD() {
-		return CCCD;
-	}
-
-	public void setCCCD(String cCCD) {
-		CCCD = cCCD;
-	}
-
-	public String getDiaChi() {
-		return diaChi;
-	}
-
-	public void setDiaChi(String diaChi) {
-		this.diaChi = diaChi;
-	}
-
-	public String getTrangThai() {
-		return trangThai;
-	}
-
-	public void setTrangThai(String trangThai) {
-		this.trangThai = trangThai;
-	}
-
-	public String getAnhThe() {
-		return anhThe;
-	}
-
-	public void setAnhThe(String anhThe) {
-		this.anhThe = anhThe;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(maNhanVien);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		NhanVien other = (NhanVien) obj;
-		return Objects.equals(maNhanVien, other.maNhanVien);
-	}
-
-	@Override
-	public String toString() {
-		return "NhanVien [maNhanVien=" + maNhanVien + ", loaiNhanVien=" + loaiNhanVien + ", hoTen=" + hoTen
-				+ ", gioiTinh=" + gioiTinh + ", ngaySinh=" + ngaySinh + ", soDienThoai=" + soDienThoai + ", CCCD="
-				+ CCCD + ", diaChi=" + diaChi + ", trangThai=" + trangThai + ", anhThe=" + anhThe +  "]";
-	}
-
 
 }

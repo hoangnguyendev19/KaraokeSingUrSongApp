@@ -514,7 +514,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(),
 							dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(), dcf.format(dv.getDonGia()),
-							dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
+							dv.isTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 
 					model_dichVu.addRow(rowData);
 				});
@@ -565,7 +565,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(),
 							dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(), dcf.format(dv.getDonGia()),
-							dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
+							dv.isTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 
 					model_dichVu.addRow(rowData);
 				});
@@ -586,7 +586,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 
 					Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(),
 							dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonViTinh(), dcf.format(dv.getDonGia()),
-							dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
+							dv.isTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 					model_dichVu.addRow(rowData);
 				});
 			}
@@ -601,7 +601,7 @@ public class JPanel_QuanLyDichVu extends JPanel implements ActionListener {
 		dsDV.forEach(dv -> {
 			Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(), dv.getThongTinDichVu().tinhSoLuongConLai(),
 					dv.getDonViTinh(), dcf.format(dv.getDonGia()),
-					dv.getTrangThai() == true ? "Còn hàng" : "Hết hàng" };
+					dv.isTrangThai() == true ? "Còn hàng" : "Hết hàng" };
 
 			model_dichVu.addRow(rowData);
 		});

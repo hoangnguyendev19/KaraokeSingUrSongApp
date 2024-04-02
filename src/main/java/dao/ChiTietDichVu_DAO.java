@@ -86,7 +86,7 @@ public class ChiTietDichVu_DAO {
 				DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(rs.getString("maDichVu"));
 				Phong ph = DAO_P.timPhong_TheoMaPhong(rs.getString("maPhong"));
 				int soLuong = rs.getInt("soLuong");
-				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dv, soLuong, ph);
+				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dv, ph, soLuong);
 
 				danhSachCTDichVu.add(ctDichVu);
 			}
@@ -115,7 +115,7 @@ public class ChiTietDichVu_DAO {
 				DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(rs.getString("maDichVu"));
 				int soLuong = rs.getInt("soLuong");
 				Phong ph = DAO_P.timPhong_TheoMaPhong(rs.getString("maPhong"));
-				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dv, soLuong, ph);
+				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dv, ph, soLuong);
 				danhSachCTDichVu.add(ctDichVu);
 			}
 
@@ -142,7 +142,7 @@ public class ChiTietDichVu_DAO {
 				DichVu dv = DAO_DV.layDichVu_TheoMaDichVu(rs.getString("maDichVu"));
 				int soLuong = rs.getInt("soLuong");
 				Phong ph = DAO_P.timPhong_TheoMaPhong(rs.getString("maPhong"));
-				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dv, soLuong, ph);
+				ChiTietDichVu ctDichVu = new ChiTietDichVu(hoaDon, dv, ph, soLuong);
 				danhSachCTDichVu.add(ctDichVu);
 			}
 

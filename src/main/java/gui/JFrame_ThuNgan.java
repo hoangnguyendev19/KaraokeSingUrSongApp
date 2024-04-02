@@ -479,7 +479,7 @@ public class JFrame_ThuNgan extends JFrame {
 		txt_tenNhanVien.setBounds(67, 0, 158, 25);
 		panel_1.add(txt_tenNhanVien);
 
-		if (nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if (nhanVien.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			addMenuClickListener(panelMenu_QLNhanVien, Panel_QLNV);
 			System.out.println("nay la quan ly");
 		} else {
@@ -491,7 +491,7 @@ public class JFrame_ThuNgan extends JFrame {
 		mntmNewMenuItem_2.addActionListener((ActionListener) new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000"));
+				System.out.println(nhanVien.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000"));
 				setVisible(false);
 				JFrame_DangNhap dangnhap = new JFrame_DangNhap();
 				dangnhap.setVisible(true);

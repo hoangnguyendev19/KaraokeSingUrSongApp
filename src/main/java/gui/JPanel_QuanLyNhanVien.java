@@ -515,7 +515,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 			if (dsNV != null) {
 				dsNV.forEach(nv -> {
 					LoaiNhanVien loaiNV = new LoaiNhanVien();
-					loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+					loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getLoaiNhanVien().getMaLoaiNhanVien());
 					String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
 					Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
 							nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai() };
@@ -533,7 +533,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		NhanVien nv = DAO_NV.timNhanVien_TheoMaNhanVien(chuoiTimKiem);
 		try {
 			LoaiNhanVien loaiNV = new LoaiNhanVien();
-			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getLoaiNhanVien().getMaLoaiNhanVien());
 			String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
 			model_ThemNhanVien = new JDialog_ThemNhanVien();
 			model_ThemNhanVien.setModal_ThemNhanVien(nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
@@ -552,7 +552,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		NhanVien nv = DAO_NV.timNhanVien_TheoSoDienThoai(chuoiTimKiem);
 		try {
 			LoaiNhanVien loaiNV = new LoaiNhanVien();
-			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getLoaiNhanVien().getMaLoaiNhanVien());
 			String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
 			model_ThemNhanVien = new JDialog_ThemNhanVien();
 			model_ThemNhanVien.setModal_ThemNhanVien(nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(),
@@ -573,7 +573,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		for (NhanVien nv : DAO_NV.layTatCaNhanVien()) {
 			String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
 			LoaiNhanVien loaiNV = new LoaiNhanVien();
-			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getLoaiNhanVien().getMaLoaiNhanVien());
 			String cccd = nv.getCCCD().trim();
 			if (cccd.equals(chuoiTimKiem)) {
 				model_ThemNhanVien = new JDialog_ThemNhanVien();
@@ -599,7 +599,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 		} else {
 			for (NhanVien nv : dsNV) {
 				LoaiNhanVien loaiNV = new LoaiNhanVien();
-				loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+				loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getLoaiNhanVien().getMaLoaiNhanVien());
 				String gender = nv.isGioiTinh() ? "Nam" : "Nữ";
 				Object[] rowData = { nv.getMaNhanVien(), loaiNV.getTenLoaiNhanVien(), nv.getHoTen(), gender,
 						nv.getNgaySinh(), nv.getSoDienThoai(), nv.getCCCD(), nv.getDiaChi(), nv.getTrangThai() };
@@ -644,7 +644,7 @@ public class JPanel_QuanLyNhanVien extends JPanel implements ActionListener, Ite
 			cal.setTime(nv.getNgaySinh());
 			int tuoi = ngayHienTai.get(Calendar.YEAR) - cal.get(Calendar.YEAR);
 			LoaiNhanVien loaiNV = new LoaiNhanVien();
-			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getloaiNhanVien().getMaLoaiNhanVien());
+			loaiNV = DAO_LoaiNV.layLoaiNhanVien_TheoMaLoaiNhanVien(nv.getLoaiNhanVien().getMaLoaiNhanVien());
 
 			String loc_LoaiNV = cb_Loc_LoaiNV.getSelectedItem().toString();
 			String chonLoaiNV = cb_Loc_LoaiNV.getItemAt(0).trim();

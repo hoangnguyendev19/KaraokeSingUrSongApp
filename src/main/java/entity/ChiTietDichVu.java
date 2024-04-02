@@ -1,24 +1,40 @@
 package entity;
 
-import java.util.ArrayList;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-/**
- * ChiTietDichVu
- */
+@Entity
+@Table(name = "ChiTietDichVu")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@IdClass(ChiTietDichVuId.class)
 public class ChiTietDichVu {
-
-
-
+	@Id
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "maHoaDon", columnDefinition = "	NCHAR(15)", nullable = false)
 	private HoaDon hoaDon;
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maDichVu", columnDefinition = "	NCHAR(15)", nullable = false)
 	private DichVu dichVu;
+    @Id
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "maPhong", columnDefinition = "	NCHAR(16)", nullable = false)
+    private Phong phong;
 	private int soLuong;
-	private Phong phong;
-
-	public ChiTietDichVu() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-	
 
 	public ChiTietDichVu(HoaDon hoaDon, DichVu dichVu, int soLuong) {
 		super();
@@ -27,59 +43,15 @@ public class ChiTietDichVu {
 		this.soLuong = soLuong;
 	}
 
-	public ChiTietDichVu(HoaDon hoaDon, DichVu dichVu, int soLuong, Phong phong) {
-		super();
-		this.hoaDon = hoaDon;
-		this.dichVu = dichVu;
-		this.soLuong = soLuong;
-		this.phong = phong;
-	}
-
 	public ChiTietDichVu(HoaDon hoaDon, DichVu dichVu) {
 		super();
 		this.hoaDon = hoaDon;
 		this.dichVu = dichVu;
 	}
 
-	public Phong getPhong() {
-		return phong;
-	}
-
-	public void setPhong(Phong phong) {
-		this.phong = phong;
-	}
-	public HoaDon getHoaDon() {
-		return hoaDon;
-	}
-
-	public void setHoaDon(HoaDon hoaDon) {
-		this.hoaDon = hoaDon;
-	}
-
-	public DichVu getDichVu() {
-		return dichVu;
-	}
-
-	public void setDichVu(DichVu dichVu) {
-		this.dichVu = dichVu;
-	}
-
-	public int getSoLuong() {
-		return soLuong;
-	}
-
-	public void setSoLuong(int soLuong) {
-		this.soLuong = soLuong;
-	}
-
 	public double thanhTien() {
 		return (double) getSoLuong() * getDichVu().getDonGia();
 
 	}
-
-	@Override
-	public String toString() {
-		return "ChiTietDichVu [hoaDon=" + hoaDon + ", dichVu=" + dichVu + ", soLuong=" + soLuong + "]";
-	}
-
+	
 }

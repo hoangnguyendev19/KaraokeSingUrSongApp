@@ -268,7 +268,7 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 
 		// SUBMIT
 		if ("Gửi mã xác nhận".equals(btnText) && tk != null) {
-			HelpForgotPwd.updatePwd(tk.gettenDangNhap(), tk.getEmail());
+			HelpForgotPwd.updatePwd(tk.getTenDangNhap(), tk.getEmail());
 			txtAccess.setEnabled(true);
 			btnSave.setText("Xác nhận mã");
 		}
@@ -293,8 +293,8 @@ public class JFrame_QuenMatKhau extends JFrame implements ActionListener, KeyLis
 
 			if((password.length() >= 8 && password.matches("\\d+")) && (passwordRepeat.length() >= 8 && passwordRepeat.matches("\\d+"))) {
 				if (password.equals(passwordRepeat) && (!password.equals("") && !passwordRepeat.equals(""))) {
-					TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password);
-					if (!TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.gettenDangNhap(), password)) {
+					TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.getTenDangNhap(), password);
+					if (!TK_DAO.capNhatTaiKhoan_TheoTenDangNhap(tk.getTenDangNhap(), password)) {
 						JOptionPane.showMessageDialog(null, "Đổi mật khẩu thành công");
 						setVisible(false);
 						JFrame_DangNhap dangNhap = new JFrame_DangNhap();

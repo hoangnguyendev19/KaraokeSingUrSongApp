@@ -1,27 +1,54 @@
 package entity;
 
 import java.sql.Date;
-import java.util.Objects;
 
-/**
- * Phòng
- * 
- * @author THANH CUONG
- *
- */
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@Table(name = "Phong")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "maPhong")
 public class Phong {
+	@Id
+	@Column(name = "maPhong", columnDefinition = "NCHAR(16)")
 	private String maPhong;
+	@Column(name = "tenPhong", columnDefinition = "NVARCHAR(40)")
 	private String tenPhong;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "maLoaiPhong", columnDefinition = "NCHAR(16)", nullable = false)
 	private LoaiPhong loaiPhong;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "maTrangThai", columnDefinition = "NCHAR(16)", nullable = false)
 	private TrangThaiPhong trangThaiPhong;
 	private Date ngayTaoPhong;
-
+	@Column(name = "viTriPhong", columnDefinition = "NCHAR(8)")
 	private String viTriPhong;
+	@Column(name = "ghiChu", columnDefinition = "NVARCHAR(100)")
 	private String ghiChu;
+	@Column(name = "tinhTrangPhong", columnDefinition = "NVARCHAR(100)")
 	private String tinhTrangPhong;
 	
+	public Phong(String maPhong) {
+		super();
+		this.maPhong = maPhong;
+	}
 	
-
 	public Phong(String maPhong, String tenPhong, TrangThaiPhong trangThaiPhong, String viTriPhong, String ghiChu,
 			String tinhTrangPhong) {
 		super();
@@ -33,118 +60,4 @@ public class Phong {
 		this.tinhTrangPhong = tinhTrangPhong;
 		
 	}
-
-	public Phong() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	
-
-	public Phong(String maPhong, String tenPhong, LoaiPhong loaiPhong, TrangThaiPhong trangThaiPhong, Date ngayTaoPhong,
-			String viTriPhong, String ghiChu, String tinhTrangPhong) {
-		super();
-		this.maPhong = maPhong;
-		this.tenPhong = tenPhong;
-		this.loaiPhong = loaiPhong;
-		this.trangThaiPhong = trangThaiPhong;
-		this.ngayTaoPhong = ngayTaoPhong;
-		this.viTriPhong = viTriPhong;
-		this.ghiChu = ghiChu;
-		this.tinhTrangPhong = tinhTrangPhong;
-	}
-
-	public Phong(String maPhong) {
-		super();
-		this.maPhong = maPhong;
-	}
-
-	public String getMaPhong() {
-		return maPhong;
-	}
-
-	public void setMaPhong(String maPhong) {
-		this.maPhong = maPhong;
-	}
-
-	public String getTenPhong() {
-		return tenPhong;
-	}
-
-	public void setTenPhong(String tenPhong) {
-		this.tenPhong = tenPhong;
-	}
-
-	public LoaiPhong getLoaiPhong() {
-		return loaiPhong;
-	}
-
-	public void setLoaiPhong(LoaiPhong loaiPhong) {
-		this.loaiPhong = loaiPhong;
-	}
-
-	public TrangThaiPhong getTrangThaiPhong() {
-		return trangThaiPhong;
-	}
-
-	public void setTrangThaiPhong(TrangThaiPhong trangThaiPhong) {
-		this.trangThaiPhong = trangThaiPhong;
-	}
-
-	public Date getNgayTaoPhong() {
-		return ngayTaoPhong;
-	}
-
-	public void setNgayTaoPhong(Date ngayTaoPhong) {
-		this.ngayTaoPhong = ngayTaoPhong;
-	}
-
-	public String getViTriPhong() {
-		return viTriPhong;
-	}
-
-	public void setViTriPhong(String viTriPhong) {
-		this.viTriPhong = viTriPhong;
-	}
-
-	public String getGhiChu() {
-		return ghiChu;
-	}
-
-	public void setGhiChu(String ghiChu) {
-		this.ghiChu = ghiChu;
-	}
-
-	public String getTinhTrangPhong() {
-		return tinhTrangPhong;
-	}
-
-	public void setTinhTrangPhong(String tinhTrangPhong) {
-		this.tinhTrangPhong = tinhTrangPhong;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(maPhong);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Phong other = (Phong) obj;
-		return Objects.equals(maPhong, other.maPhong);
-	}
-
-	@Override
-	public String toString() {
-		return "Phong [maPhong=" + maPhong + ", tenPhong=" + tenPhong + ", loaiPhong=" + loaiPhong + ", trangThaiPhong="
-				+ trangThaiPhong + ", ngayTaoPhong=" + ngayTaoPhong + ", viTriPhong=" + viTriPhong + ", ghiChu="
-				+ ghiChu + ", tinhTrangPhong=" + tinhTrangPhong + "]";
-	}
-
 }

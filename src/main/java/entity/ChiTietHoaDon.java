@@ -1,18 +1,33 @@
 package entity;
 
-import java.sql.Timestamp;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.IdClass;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
+@Entity
+@Table(name = "ChiTietHoaDon")
+@NoArgsConstructor
+@Getter
+@Setter
+@ToString
+@IdClass(ChiTietHoaDonId.class)
 public class ChiTietHoaDon {
+	@Id
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "maHoaDon", columnDefinition = "	NCHAR(15)", nullable = false)
 	private HoaDon hoaDon;
+	@Id
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "maPhong", columnDefinition = "	NCHAR(16)", nullable = false)
 	private Phong phong;
-
-	public ChiTietHoaDon() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
 
 	public ChiTietHoaDon(HoaDon hoaDon, Phong phong) {
 		super();
@@ -20,31 +35,10 @@ public class ChiTietHoaDon {
 		this.phong = phong;
 	}
 
-	public HoaDon getHoaDon() {
-		return hoaDon;
-	}
-
-	public void setHoaDon(HoaDon hoaDon) {
-		this.hoaDon = hoaDon;
-	}
-
-	public Phong getPhong() {
-		return phong;
-	}
-
-	public void setPhong(Phong phong) {
-		this.phong = phong;
-	}
-
 	public double thanhTien(float soGioHat) {
 
 		return (double) getPhong().getLoaiPhong().getGiaTien() * soGioHat;
 
-	}
-
-	@Override
-	public String toString() {
-		return "ChiTietHoaDon [hoaDon=" + hoaDon + ", phong=" + phong + "]";
 	}
 
 }

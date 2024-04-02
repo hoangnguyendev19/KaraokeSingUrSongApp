@@ -460,7 +460,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		btn_resetTopDV.addActionListener(this);
 		btn_thongKeTopDV.addActionListener(this);
 		
-		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nv_Role.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			Jdate_ngayBatDau.setEnabled(false);
 			Jdate_ngayKetThuc.setEnabled(false);
 		}
@@ -504,7 +504,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		String ngayBD = "";
 		String ngayKT = "";
 		
-		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nv_Role.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			LocalDate currentDate = LocalDate.now();
 			LocalDate tomorrowDate = currentDate.plusDays(1);
 			
@@ -560,7 +560,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		Date sevenDaysAgo = calendar.getTime();
 
 		
-		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nv_Role.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			Jdate_ngayBatDau.setDate(currentDate);
 			Jdate_ngayKetThuc.setDate(currentDate);
 		} else {
@@ -574,7 +574,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		String ngayBD = "";
 		String ngayKT = "";
 		
-		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nv_Role.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			LocalDate currentDate = LocalDate.now();
 			LocalDate tomorrowDate = currentDate.plusDays(1);
 			
@@ -605,7 +605,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		String ngayBD = "";
 		String ngayKT = "";
 		
-		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nv_Role.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			LocalDate currentDate = LocalDate.now();
 			LocalDate tomorrowDate = currentDate.plusDays(1);
 			
@@ -636,7 +636,7 @@ public class JPanel_BieuDoThongKe extends JPanel implements ActionListener {
 		String ngayBD = "";
 		String ngayKT = "";
 		
-		if(!nv_Role.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nv_Role.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			LocalDate currentDate = LocalDate.now();
 			LocalDate tomorrowDate = currentDate.plusDays(1);
 			

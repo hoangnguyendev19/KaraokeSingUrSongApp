@@ -258,7 +258,7 @@ public class JDialog_CapNhatSoLuongDVThanhToan extends JFrame implements ActionL
 				if (t == JOptionPane.YES_OPTION) {
 
 					ChiTietDichVu_DAO DAO_CTDV = new ChiTietDichVu_DAO();
-					ChiTietDichVu ctdv = new ChiTietDichVu(getHoaDonTT(), dv, 0, getPhongTT());
+					ChiTietDichVu ctdv = new ChiTietDichVu(getHoaDonTT(), dv, getPhongTT(), 0);
 
 					if (DAO_CTDV.xoaCTDichVu_TheoMaHD_MaP(ctdv)) {
 						JOptionPane.showMessageDialog(null,
@@ -294,7 +294,7 @@ public class JDialog_CapNhatSoLuongDVThanhToan extends JFrame implements ActionL
 					table_datDichVu.setValueAt(dcf.format(thanhTienMoi), rowSelected, 5);
 					ChiTietDichVu_DAO DAO_CTDV = new ChiTietDichVu_DAO();
 
-					ChiTietDichVu ctdv = new ChiTietDichVu(getHoaDonTT(), dv, soLuongMoiCapNhat, getPhongTT());
+					ChiTietDichVu ctdv = new ChiTietDichVu(getHoaDonTT(), dv, getPhongTT(), soLuongMoiCapNhat);
 
 					if (DAO_CTDV.capNhatCTDichVu_Theo_MaHoaDon_MaDichVu_MaPhong(ctdv)) {
 						JOptionPane.showMessageDialog(null, "Cập nhật dịch vụ thanh toán thành công!!");

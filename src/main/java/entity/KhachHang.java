@@ -3,140 +3,44 @@ package entity;
 import java.sql.Date;
 import java.util.Objects;
 
-/**
- * Khách hàng
- * @author THANH CUONG
- *
- */
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+
+@Entity
+@Table(name = "KhachHang")
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(of = "maKhachHang")
 public class KhachHang {
+	@Id
+	@Column(name = "maKhachHang", columnDefinition = "NCHAR(16)")
 	private String maKhachHang;
+	@Column(name = "hoTen", columnDefinition = "NVARCHAR(40)")
 	private String hoTen;
 	private boolean gioiTinh;
 	private Date ngaySinh;
+	@Column(name = "diaChi", columnDefinition = "NCHAR(40)")
 	private String diaChi;
+	@Column(name = "soDienThoai", columnDefinition = "NCHAR(10)")
 	private String soDienThoai;
 	private int diemThuong;
+	@Column(name = "ghiChu", columnDefinition = "NVARCHAR(40)")
 	private String ghiChu;
-
-	public KhachHang() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	/**
-	 * @param maKhachHang
-	 * @param hoTen
-	 * @param gioiTinh
-	 * @param ngaySinh
-	 * @param diaChi
-	 * @param soDienThoai
-	 * @param diemThuong
-	 * @param ghiChu
-	 */
-	public KhachHang(String maKhachHang, String hoTen, boolean gioiTinh, Date ngaySinh, String diaChi,
-			String soDienThoai, int diemThuong, String ghiChu) {
-		super();
-		this.maKhachHang = maKhachHang;
-		this.hoTen = hoTen;
-		this.gioiTinh = gioiTinh;
-		this.ngaySinh = ngaySinh;
-		this.diaChi = diaChi;
-		this.soDienThoai = soDienThoai;
-		this.diemThuong = diemThuong;
-		this.ghiChu = ghiChu;
-	}
 
 	public KhachHang(String maKhachHang) {
 		super();
 		this.maKhachHang = maKhachHang;
-	}
-
-	public String getMaKhachHang() {
-		return maKhachHang;
-	}
-
-	public void setMaKhachHang(String maKhachHang) {
-		this.maKhachHang = maKhachHang;
-	}
-
-	public String getHoTen() {
-		return hoTen;
-	}
-
-	public void setHoTen(String hoTen) {
-		this.hoTen = hoTen;
-	}
-
-	public boolean isGioiTinh() {
-		return gioiTinh;
-	}
-
-	public void setGioiTinh(boolean gioiTinh) {
-		this.gioiTinh = gioiTinh;
-	}
-
-	public Date getNgaySinh() {
-		return ngaySinh;
-	}
-
-	public void setNgaySinh(Date ngaySinh) {
-		this.ngaySinh = ngaySinh;
-	}
-
-	public String getDiaChi() {
-		return diaChi;
-	}
-
-	public void setDiaChi(String diaChi) {
-		this.diaChi = diaChi;
-	}
-
-	public String getSoDienThoai() {
-		return soDienThoai;
-	}
-
-	public void setSoDienThoai(String soDienThoai) {
-		this.soDienThoai = soDienThoai;
-	}
-
-	public int getDiemThuong() {
-		return diemThuong;
-	}
-
-	public void setDiemThuong(int diemThuong) {
-		this.diemThuong = diemThuong;
-	}
-
-	public String getGhiChu() {
-		return ghiChu;
-	}
-
-	public void setGhiChu(String ghiChu) {
-		this.ghiChu = ghiChu;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(maKhachHang);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		KhachHang other = (KhachHang) obj;
-		return Objects.equals(maKhachHang, other.maKhachHang);
-	}
-
-	@Override
-	public String toString() {
-		return "KhachHang [maKhachHang=" + maKhachHang + ", hoTen=" + hoTen + ", gioiTinh=" + gioiTinh + ", ngaySinh="
-				+ ngaySinh + ", diaChi=" + diaChi + ", soDienThoai=" + soDienThoai + ", diemThuong=" + diemThuong
-				+ ", ghiChu=" + ghiChu + "]";
 	}
 
 }

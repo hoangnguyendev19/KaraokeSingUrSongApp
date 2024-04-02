@@ -253,7 +253,7 @@ public class JDialog_CapNhatLoaiPhong extends JFrame implements ActionListener {
 		btn_Luu.addActionListener(this);
 		btn_ChonAnh.addActionListener(this);
 		
-		if(!nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nhanVien.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			btn_Luu.removeActionListener(this);
 			txt_GiaTien.setEditable(false);
 			txt_MaLoaiPhong.setEditable(false);

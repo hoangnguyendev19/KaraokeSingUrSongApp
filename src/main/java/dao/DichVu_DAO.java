@@ -215,7 +215,7 @@ public class DichVu_DAO {
 			statement.setString(2, dichVu.getTenDichVu());
 			statement.setString(3, dichVu.getDonViTinh());
 			statement.setDouble(4, dichVu.getDonGia());
-			statement.setBoolean(5, dichVu.getTrangThai());
+			statement.setBoolean(5, dichVu.isTrangThai());
 			statement.setString(6, dichVu.getThongTinDichVu().getMaThongTinDichVu());
 			n = statement.executeUpdate();
 		} catch (Exception e) {
@@ -243,7 +243,7 @@ public class DichVu_DAO {
 			statement.setString(1, dichVu.getTenDichVu());
 			statement.setString(2, dichVu.getDonViTinh());
 			statement.setDouble(3, dichVu.getDonGia());
-			statement.setBoolean(4, dichVu.getTrangThai());
+			statement.setBoolean(4, dichVu.isTrangThai());
 			statement.setString(5, dichVu.getThongTinDichVu().getMaThongTinDichVu());
 			statement.setString(6, dichVu.getMaDichVu());
 			n = statement.executeUpdate();

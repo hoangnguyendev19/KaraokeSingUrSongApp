@@ -485,7 +485,7 @@ public class JDialog_DatDichVu extends JFrame implements ActionListener {
 
 				String maDichVu = table_dvDatPhong.getValueAt(i, 0).toString();
 				ChiTietDichVu ctdv = new ChiTietDichVu(hoaDon, new DichVu(maDichVu),
-						Integer.parseInt(table_dvDatPhong.getValueAt(i, 2).toString()), phong);
+						phong, Integer.parseInt(table_dvDatPhong.getValueAt(i, 2).toString()));
 				try {
 					DAO_CTDV.taoCTDichVu(ctdv);
 					DichVu_DAO DAO_DV = new DichVu_DAO();
@@ -593,7 +593,7 @@ public class JDialog_DatDichVu extends JFrame implements ActionListener {
 			if (dsDV != null) {
 
 				dsDV.forEach(dv -> {
-					if (dv.getTrangThai()) {
+					if (dv.isTrangThai()) {
 						System.out.println("so luong su dung:" + dv.getThongTinDichVu().tinhSoLuongConLai());
 						Object[] rowData = { dv.getMaDichVu(), dv.getTenDichVu(),
 								dv.getThongTinDichVu().tinhSoLuongConLai(), dv.getDonGia() };

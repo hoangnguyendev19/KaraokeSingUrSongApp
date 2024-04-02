@@ -314,7 +314,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 			JOptionPane.showMessageDialog(null, "Mật khẩu không đúng! ");
 		} else {
 			nhanVienDangNhap = NV_DAO.timNhanVien_TheoMaNhanVien(taiKhoanDangNhap.getNhanVien().getMaNhanVien());
-			String role = nhanVienDangNhap.getloaiNhanVien().getMaLoaiNhanVien();
+			String role = nhanVienDangNhap.getLoaiNhanVien().getMaLoaiNhanVien();
 			if (taiKhoanDangNhap.isTrangThai()) {
 				thuNgan = new JFrame_ThuNgan(nhanVienDangNhap);
 				thuNgan.setVisible(true);

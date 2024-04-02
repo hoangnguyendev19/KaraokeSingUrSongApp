@@ -91,7 +91,7 @@ public class JPanel_CardDichVu extends JPanel {
 				String donViTinh = dichVu.getDonViTinh();
 				double donGia = dichVu.getDonGia();
 				int soLuongTon = ttdv.getSoLuong() - ttdv.getSoLuongDaSuDung();
-				String trangThai = dichVu.getTrangThai() ? "Còn hàng" : "Hết hàng";
+				String trangThai = dichVu.isTrangThai() ? "Còn hàng" : "Hết hàng";
 				String mieuTa = ttdv.getMoTa();
 				JDialog_XemThongDichVu modal_XemTTDV = new JDialog_XemThongDichVu();
 				modal_XemTTDV.SetModal_XemThongTinDichVu(tenDV, donViTinh, donGia, soLuongTon, trangThai, mieuTa);

@@ -674,7 +674,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		DocDuLieu_DV();
 		
 		nv = nhVien;
-		if(!nhVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if(!nhVien.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			cbx_DV_LocNam.removeActionListener(this);
 			cbx_DV_LocQuy.removeActionListener(this);
 			cbx_DV_LocThang.removeActionListener(this);
@@ -886,7 +886,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 
 		Date ngayKetThuc = new Date();
 		try {
-			if(!nv.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			if(!nv.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 				Calendar calendar = Calendar.getInstance();
 				
 				calendar.add(Calendar.DAY_OF_MONTH, 1);
@@ -910,7 +910,7 @@ public class JPanel_BaoCaoThongKe extends JPanel implements ActionListener, Prop
 		
 		Date ngayBatDau = new Date();
 		try {
-			if(!nv.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+			if(!nv.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 				Calendar calendar = Calendar.getInstance();
 		        calendar.set(Calendar.HOUR_OF_DAY, 0);      // Giờ
 		        calendar.set(Calendar.MINUTE, 1);           // Phút

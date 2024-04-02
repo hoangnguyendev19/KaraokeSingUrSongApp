@@ -382,7 +382,7 @@ public class JPanel_QuanLyPhong extends JPanel implements ActionListener, ItemLi
 		cbo_status.addItemListener(this);
 		cbo_floor.addItemListener(this);
 
-		if (!nhanVien.getloaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
+		if (!nhanVien.getLoaiNhanVien().getMaLoaiNhanVien().trim().equals("LNV000")) {
 			btnThem.removeActionListener(this);
 			btnXoa.removeActionListener(this);
 
