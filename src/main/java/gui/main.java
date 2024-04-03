@@ -36,11 +36,6 @@ public class main extends JFrame {
 
 			public void run() {
 				try {
-					try {
-						ConnectDB.getInstance().connect();
-					} catch (SQLException e) {
-						e.printStackTrace();
-					}
 					FlatLightLaf.setup();
 					app = new JFrame_DangNhap();
 					app.setVisible(true);
@@ -48,11 +43,8 @@ public class main extends JFrame {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
 			}
-
 		});
-
 	}
 
 }

@@ -14,7 +14,4 @@ public class ConnectDB {
 		return this.em;
 	}
 	
-	public void close() {
-		this.em.close();
-	}
 }

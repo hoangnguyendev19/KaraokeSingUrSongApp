@@ -49,11 +49,6 @@ public class HelpRanDomDichVu {
 	}
 
 	public static void main(String[] args) {
-		try {
-			ConnectDB.getInstance().connect();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		String maDV = taoMaDV();
 		String maTTDV = taoMaTTDV();
 		System.out.println(maTTDV);

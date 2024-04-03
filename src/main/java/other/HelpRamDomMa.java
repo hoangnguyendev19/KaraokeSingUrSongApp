@@ -175,12 +175,6 @@ public class HelpRamDomMa {
 	}
 
 	public static void main(String[] args) {
-		try {
-			ConnectDB.getInstance().connect();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-
 		String maHD = taoMa("HoaDon", "maHoaDon", "HD");
 		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
 
