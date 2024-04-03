@@ -32,6 +32,7 @@ public class KhuyenMai {
 	private Date ngayBatDau;
 	private Date ngayKetThuc;
 	private int tongSoLuong;
+	@Column(name = "chietKhau", columnDefinition = "FLOAT")
 	private double chietKhau;
 	@Column(name = "moTa", columnDefinition = "NVARCHAR(40)")
 	private String moTa;
