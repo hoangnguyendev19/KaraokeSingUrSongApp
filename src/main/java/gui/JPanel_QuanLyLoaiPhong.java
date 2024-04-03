@@ -383,7 +383,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 			if (dsLP != null) {
 				dsLP.forEach(lp -> {
 
-					Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
+					Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongKhachToiDa(),
 							lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
 
 					model.addRow(rowData);
@@ -404,7 +404,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 					if (dsLP != null) {
 						dsLP.forEach(lp -> {
 
-							Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
+							Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongKhachToiDa(),
 									lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
 
 							model.addRow(rowData);
@@ -480,7 +480,7 @@ public class JPanel_QuanLyLoaiPhong extends JPanel implements ActionListener, Ke
 	    			if(!dsLP.isEmpty()) {
 	    				dsLP.forEach(lp -> {
 
-							Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongToiDa(),
+							Object[] rowData = { lp.getMaLoaiPhong(), lp.getTenLoaiPhong(), lp.getSoLuongKhachToiDa(),
 									lp.getGiaTien(), lp.getHinhAnh(), lp.getMoTa() };
 
 							model.addRow(rowData);
