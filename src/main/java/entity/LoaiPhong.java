@@ -27,7 +27,7 @@ public class LoaiPhong {
 	private String maLoaiPhong;
 	@Column(name = "tenLoaiPhong", columnDefinition = "NVARCHAR(40)")
 	private String tenLoaiPhong;
-	private int soLuongToiDa;
+	private int soLuongKhachToiDa;
 	private double giaTien;
 	@Column(name = "hinhAnh", columnDefinition = "NCHAR(255)")
 	private String hinhAnh;

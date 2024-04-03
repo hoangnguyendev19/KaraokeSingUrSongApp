@@ -7,7 +7,7 @@ public class ConnectDB {
 	private EntityManager em;
 	
 	public ConnectDB() {
-		this.em = Persistence.createEntityManagerFactory("SingUrSong_vnew").createEntityManager();
+		this.em = Persistence.createEntityManagerFactory("KaraokeSingUrSongApp").createEntityManager();
 	}
 	
 	public EntityManager getEntityManager() {

@@ -171,7 +171,7 @@ public class LoaiPhong_DAO {
 			String sql = "INSERT INTO LoaiPhong values(?,?,?,?,?,?)";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, loaiPhong.getMaLoaiPhong())
-					.setParameter(2, loaiPhong.getTenLoaiPhong()).setParameter(3, loaiPhong.getSoLuongToiDa())
+					.setParameter(2, loaiPhong.getTenLoaiPhong()).setParameter(3, loaiPhong.getSoLuongKhachToiDa())
 					.setParameter(4, loaiPhong.getGiaTien()).setParameter(5, loaiPhong.getHinhAnh())
 					.setParameter(6, loaiPhong.getMoTa()).executeUpdate();
 			
@@ -224,7 +224,7 @@ public class LoaiPhong_DAO {
 					+ " WHERE maLoaiPhong = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, loaiPhong.getTenLoaiPhong())
-					.setParameter(2, loaiPhong.getSoLuongToiDa()).setParameter(3, loaiPhong.getGiaTien())
+					.setParameter(2, loaiPhong.getSoLuongKhachToiDa()).setParameter(3, loaiPhong.getGiaTien())
 					.setParameter(4, loaiPhong.getHinhAnh()).setParameter(5, loaiPhong.getMoTa())
 					.setParameter(6, loaiPhong.getMaLoaiPhong()).executeUpdate();
 			

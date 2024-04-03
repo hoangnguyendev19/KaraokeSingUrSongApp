@@ -30,7 +30,6 @@ public class ChiTietDichVu {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maDichVu", columnDefinition = "	NCHAR(15)", nullable = false)
 	private DichVu dichVu;
-    @Id
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "maPhong", columnDefinition = "	NCHAR(16)", nullable = false)
     private Phong phong;
