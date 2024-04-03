@@ -1,34 +1,20 @@
 package connectDB;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Persistence;
 
 public class ConnectDB {
-	public static Connection con = null;
-	private static ConnectDB instance = new ConnectDB();
-
-	public static ConnectDB getInstance() {
-		return instance;
+	private EntityManager em;
+	
+	public ConnectDB() {
+		this.em = Persistence.createEntityManagerFactory("SingUrSong_vnew").createEntityManager();
 	}
-
-	public void connect() throws SQLException {
-		String url = "jdbc:sqlserver://localhost:1433;databaseName=SingUrSong_vnew;encrypt=false;trustServerCertificate=true;";
-		String user = "sa";
-		String password = "sapassword";
-		con = DriverManager.getConnection(url, user, password);
+	
+	public EntityManager getEntityManager() {
+		return this.em;
 	}
-
-	public void disconnect() {
-		if (con != null)
-			try {
-				con.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-	}
-
-	public static Connection getConnection() {
-		return con;
+	
+	public void close() {
+		this.em.close();
 	}
 }
