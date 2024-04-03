@@ -10,6 +10,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 
 import connectDB.ConnectDB;
+import jakarta.persistence.EntityManager;
 
 public class HelpRamDomMa {
 
@@ -90,10 +91,52 @@ public class HelpRamDomMa {
 	}
 
 	public static ArrayList<String> maToDaTaBase(String tenBang, String tenCot) {
-		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew;encrypt=false;trustServerCertificate=true;";
-		String user = "sa";
-		String password = "sapassword";
-		String maHoaDon = "";
+//		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew;encrypt=false;trustServerCertificate=true;";
+//		String user = "sa";
+//		String password = "sapassword";
+//		String maHoaDon = "";
+//		String sql = "";
+//		if (tenBang.trim().equals("HoaDon")) {
+//			sql = "SELECT * " + " FROM  " + "  " + tenBang + "  " + tenCot + "  "
+//					+ "WHERE  ngayLap = (SELECT MAX(ngayLap) FROM HoaDon)";
+//		}
+//		if (tenBang.trim().equals("PhieuDatPhong")) {
+//			sql = "SELECT TOP 1 * " + " FROM  " + "  " + tenBang + "  " + tenCot + "  "
+//					+ " ORDER BY thoiGianDatPhong DESC";
+//		}
+//		ArrayList<String> maCot = new ArrayList<>();
+//		try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
+//
+//			PreparedStatement preparedStatement = con.prepareStatement(sql);
+//			ResultSet rs = preparedStatement.executeQuery();
+//
+//			while (rs.next()) {
+//				maHoaDon = rs.getString(tenCot);
+//				maCot.add(maHoaDon);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		if (tenBang.trim().equals("HoaDon")) {
+//
+//			String ma = maCot.get(0);
+//			for (int i = 0; i < maCot.size() - 1; i++) {
+//				for (int j = i + 1; j < maCot.size(); j++) {
+//					ma = soSanhMa(maCot.get(i), maCot.get(j));
+//
+//				}
+//
+//			}
+//			ArrayList<String> maCot2 = new ArrayList<>();
+//			maCot2.add(ma);
+//
+//			return maCot2;
+//		}
+//		return maCot;
+		
+		// Please help me customize the code above to use JPA
+		EntityManager em = new ConnectDB().getEntityManager();
+		ArrayList<String> maCot = new ArrayList<>();
 		String sql = "";
 		if (tenBang.trim().equals("HoaDon")) {
 			sql = "SELECT * " + " FROM  " + "  " + tenBang + "  " + tenCot + "  "
@@ -103,19 +146,8 @@ public class HelpRamDomMa {
 			sql = "SELECT TOP 1 * " + " FROM  " + "  " + tenBang + "  " + tenCot + "  "
 					+ " ORDER BY thoiGianDatPhong DESC";
 		}
-		ArrayList<String> maCot = new ArrayList<>();
-		try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
-
-			PreparedStatement preparedStatement = con.prepareStatement(sql);
-			ResultSet rs = preparedStatement.executeQuery();
-
-			while (rs.next()) {
-				maHoaDon = rs.getString(tenCot);
-				maCot.add(maHoaDon);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		
+		maCot = (ArrayList<String>) em.createNativeQuery(sql).getResultList();
 		if (tenBang.trim().equals("HoaDon")) {
 
 			String ma = maCot.get(0);
@@ -131,7 +163,8 @@ public class HelpRamDomMa {
 
 			return maCot2;
 		}
-		return maCot;
+		
+		return maCot;	
 	}
 
 	public static String cutString(String x) {
@@ -177,7 +210,6 @@ public class HelpRamDomMa {
 	public static void main(String[] args) {
 		String maHD = taoMa("HoaDon", "maHoaDon", "HD");
 		String maPhieuDat2 = taoMa("PhieuDatPhong", "maPhieuDat", "PD");
-
 	}
 
 }
