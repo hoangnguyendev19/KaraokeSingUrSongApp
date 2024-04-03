@@ -24,6 +24,8 @@ import connectDB.ConnectDB;
 import dao.Phong_DAO;
 import entity.Phong;
 import entity.TrangThaiPhong;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import other.HelpXLSX;
 
 public class main extends JFrame {
@@ -36,14 +38,22 @@ public class main extends JFrame {
 
 			public void run() {
 				try {
+					ConnectDB connectDB = new ConnectDB();
+					EntityManager em = connectDB.getEntityManager();
+					EntityTransaction tr = em.getTransaction();
 					try {
-						ConnectDB.getInstance().connect();
-					} catch (SQLException e) {
+						tr.begin();
+						
+						FlatLightLaf.setup();
+						app = new JFrame_DangNhap();
+						app.setVisible(true);
+						
+						tr.commit();
+					} catch (Exception e) {
 						e.printStackTrace();
+						tr.rollback();
 					}
-					FlatLightLaf.setup();
-					app = new JFrame_DangNhap();
-					app.setVisible(true);
+					
 
 				} catch (Exception e) {
 					e.printStackTrace();
