@@ -22,7 +22,7 @@ public class HelpForgotPwd {
 	public static void updatePwd(String tenDangNhap, String email) {
 		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
 		String user = "sa";
-		String password = "230903";
+		String password = "sapassword";
 		String newPwd = generateRandomString();
 		int n = 0;
 

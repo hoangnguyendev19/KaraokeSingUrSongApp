@@ -55,14 +55,12 @@ public class main extends JFrame {
 					}
 					
 
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
 			}
-
 		});
-
 	}
 
 }

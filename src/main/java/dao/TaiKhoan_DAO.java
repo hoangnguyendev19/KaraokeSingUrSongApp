@@ -380,7 +380,7 @@ public class TaiKhoan_DAO {
 //			PreparedStatement statement = con
 //					.prepareStatement("SELECT * FROM TaiKhoan WHERE tenDangNhap = ?");
 //			statement.setString(1, tenDangNhap);
-//			ResultSet rs = statement.executeQuery();s
+//			ResultSet rs = statement.executeQuery();
 //
 //			while (rs.next()) {
 //				NhanVien nhanVien = new NhanVien(rs.getString("maNhanVien"));
