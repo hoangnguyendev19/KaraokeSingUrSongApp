@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 
+import connectDB.ConnectDB;
+import jakarta.persistence.EntityManager;
+
 public class HelpForgotPwd {
 
 	private static final String CHARACTERS = "0123456789";
@@ -20,36 +23,49 @@ public class HelpForgotPwd {
 	}
 
 	public static void updatePwd(String tenDangNhap, String email) {
-		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
-		String user = "sa";
-		String password = "sapassword";
+//		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
+//		String user = "sa";
+//		String password = "230903";
+//		String newPwd = generateRandomString();
+//		int n = 0;
+//
+//		try {
+//			Connection con = DriverManager.getConnection(jdbcUrl, user, password);
+//			String sql = "UPDATE TaiKhoan SET matKhau= ? WHERE tenDangNhap = ?";
+//			PreparedStatement preparedStatement = con.prepareStatement(sql);
+//			preparedStatement.setString(1, newPwd);
+//			preparedStatement.setString(2, tenDangNhap);
+//
+//			n = preparedStatement.executeUpdate();
+//
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//
+//		} finally {
+//			try {
+//
+//			} catch (Exception e2) {
+//				e2.printStackTrace();
+//			}
+//		}
+//
+//		if (n > 0) {
+//			HelpEmail.sendMail(email, "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: " + newPwd);
+//		}
+		
+		// Please help me customize this comment code above to use JPA
+		EntityManager em = new ConnectDB().getEntityManager();
 		String newPwd = generateRandomString();
 		int n = 0;
-
 		try {
-			Connection con = DriverManager.getConnection(jdbcUrl, user, password);
-			String sql = "UPDATE TaiKhoan SET matKhau= ? WHERE tenDangNhap = ?";
-			PreparedStatement preparedStatement = con.prepareStatement(sql);
-			preparedStatement.setString(1, newPwd);
-			preparedStatement.setString(2, tenDangNhap);
-
-			n = preparedStatement.executeUpdate();
-
+			n = em.createNativeQuery("UPDATE TaiKhoan SET matKhau= ? WHERE tenDangNhap = ?").setParameter(1, newPwd)
+					.setParameter(2, tenDangNhap).executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
-
-		} finally {
-			try {
-
-			} catch (Exception e2) {
-				e2.printStackTrace();
-			}
 		}
-
 		if (n > 0) {
 			HelpEmail.sendMail(email, "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: " + newPwd);
 		}
-
 	}
 
 	public static void main(String[] args) {

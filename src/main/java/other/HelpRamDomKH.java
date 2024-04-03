@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import connectDB.ConnectDB;
+import jakarta.persistence.EntityManager;
+
 public class HelpRamDomKH {
 
 	private String soDT;
@@ -43,28 +46,41 @@ public class HelpRamDomKH {
 	}
 
 	public static ArrayList<String> maToDaTaBase(String tenBang, String tenCot) {
-		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
-		String user = "sa";
-		String password = "sapassword";
-		String maKhachHang = "";
-
+//		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
+//		String user = "sa";
+//		String password = "230903";
+//		String maKhachHang = "";
+//
+//		ArrayList<String> maCot = new ArrayList<>();
+//
+//		try {
+//			Connection con = DriverManager.getConnection(jdbcUrl, user, password);
+//			String sql = "SELECT " + tenCot + " FROM " + tenBang;
+//			PreparedStatement preparedStatement = con.prepareStatement(sql);
+//			ResultSet rs = preparedStatement.executeQuery();
+//
+//			while (rs.next()) {
+//				maKhachHang = rs.getString(tenCot);
+//				System.out.println(maKhachHang);
+//				maCot.add(maKhachHang);
+//			}
+//
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return maCot;
+		
+		// Please help me customize this comment code above to use JPA
+		
+		EntityManager em = new ConnectDB().getEntityManager();
 		ArrayList<String> maCot = new ArrayList<>();
-
+		String sql = "SELECT " + tenCot + " FROM " + tenBang;
 		try {
-			Connection con = DriverManager.getConnection(jdbcUrl, user, password);
-			String sql = "SELECT " + tenCot + " FROM " + tenBang;
-			PreparedStatement preparedStatement = con.prepareStatement(sql);
-			ResultSet rs = preparedStatement.executeQuery();
-
-			while (rs.next()) {
-				maKhachHang = rs.getString(tenCot);
-				System.out.println(maKhachHang);
-				maCot.add(maKhachHang);
-			}
-
-		} catch (SQLException e) {
+			maCot = (ArrayList<String>) em.createNativeQuery(sql).getResultList();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		return maCot;
 	}
 

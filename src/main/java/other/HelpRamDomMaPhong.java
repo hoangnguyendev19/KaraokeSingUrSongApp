@@ -9,6 +9,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;import org.apache.commons.codec.binary.BaseNCodecOutputStream;
 
+import connectDB.ConnectDB;
+import jakarta.persistence.EntityManager;
+
 
 
 
@@ -51,26 +54,38 @@ public class HelpRamDomMaPhong {
 	}
 
 	public static ArrayList<String> maToDaTaBase() {
-		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
-		String user = "sa";
-		String password = "sapassword";
-		String maPhong = "";
+//		String jdbcUrl = "jdbc:sqlserver://localhost:1433;databasename=SingUrSong_vnew";
+//		String user = "sa";
+//		String password = "sapassword";
+//		String maPhong = "";
+//		
+//		 ArrayList<String> maCot = new ArrayList<>();
+//        
+//        try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
+//        	String sql = "SELECT * FROM Phong";
+//            PreparedStatement preparedStatement = con.prepareStatement(sql);
+//            ResultSet rs = preparedStatement.executeQuery();
+//
+//            while (rs.next()) {
+//            	maPhong = rs.getString("maPhong");           	
+//            	maCot.add(maPhong);		
+//            }
+//               
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//		return maCot;
 		
-		 ArrayList<String> maCot = new ArrayList<>();
-        
-        try (Connection con = DriverManager.getConnection(jdbcUrl, user, password)) {
-        	String sql = "SELECT * FROM Phong";
-            PreparedStatement preparedStatement = con.prepareStatement(sql);
-            ResultSet rs = preparedStatement.executeQuery();
-
-            while (rs.next()) {
-            	maPhong = rs.getString("maPhong");           	
-            	maCot.add(maPhong);		
-            }
-               
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+		// Please help me customize this comment code above to use JPA
+		EntityManager em = new ConnectDB().getEntityManager();
+		ArrayList<String> maCot = new ArrayList<>();
+		String sql = "SELECT maPhong FROM Phong";
+		try {
+			maCot = (ArrayList<String>) em.createNativeQuery(sql).getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return maCot;
 	}
 	
