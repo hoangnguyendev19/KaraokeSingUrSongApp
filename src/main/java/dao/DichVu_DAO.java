@@ -38,14 +38,24 @@ public class DichVu_DAO {
 		try {
 			// create native query
 			String sql = "select count(maDichVu) as Dem from DichVu";
-			em.getTransaction().begin();
-			int dem = (int) em.createNativeQuery(sql).getSingleResult();
+//			em.getTransaction().begin();
+			int dem = 0;
 
-			em.close();
+			Object obj = em.createNativeQuery(sql).getSingleResult();
+			if (obj != null) {
+				dem = Integer.parseInt(obj.toString());
+			}
+			
+			System.out.println("so luong dich vu: " + dem);
+
+			
+//			em.getTransaction().commit();
+//			em.close();
 			return dem;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
+			em.close();
 			return 0;
 		}
 	}
@@ -357,24 +367,24 @@ public class DichVu_DAO {
 //		}
 //
 //		return n;
-		
+
 		try {
 			String sql = "UPDATE DichVu SET tenDichVu = ?, donViTinh = ?, donGia = ?, trangThai = ?, maThongTinDichVu = ?"
 					+ " WHERE maDichVu = ?";
-			
+
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, dichVu.getTenDichVu())
 					.setParameter(2, dichVu.getDonViTinh()).setParameter(3, dichVu.getDonGia())
 					.setParameter(4, dichVu.isTrangThai())
 					.setParameter(5, dichVu.getThongTinDichVu().getMaThongTinDichVu())
 					.setParameter(6, dichVu.getMaDichVu()).executeUpdate();
-			
+
 			if (result == 0) {
 				em.getTransaction().rollback();
 				em.close();
 				return 0;
 			}
-			
+
 			em.getTransaction().commit();
 			em.close();
 			return result;
@@ -415,16 +425,16 @@ public class DichVu_DAO {
 //			e.printStackTrace();
 //		}
 //		return danhSachDichVu;
-		
+
 		try {
 			String sql = "SELECT *\r\n" + "FROM DichVu dv\r\n"
 					+ "JOIN ThongTinDichVu tt ON dv.maThongTinDichVu = tt.maThongTinDichVu\r\n" + "WHERE "
 					+ "tt.ngayNhap= ?\r\n" + "    AND dv.trangThai = ?\r\n" + "    AND dv.donGia BETWEEN ? AND ?";
-			
+
 			em.getTransaction().begin();
 			ArrayList<DichVu> ds = (ArrayList<DichVu>) em.createNativeQuery(sql, DichVu.class).setParameter(1, ngayNhap)
 					.setParameter(2, trangThaiLoc).setParameter(3, giaBD).setParameter(4, giaKT).getResultList();
-			
+
 			em.close();
 			return ds;
 		} catch (Exception e) {
@@ -454,18 +464,18 @@ public class DichVu_DAO {
 //			}
 //		}
 //		return n > 0;
-		
+
 		try {
 			String sql = "DELETE FROM DichVu" + " WHERE maDichVu = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, dichVu.getMaDichVu()).executeUpdate();
-			
+
 			if (result == 0) {
 				em.getTransaction().rollback();
 				em.close();
 				return false;
 			}
-			
+
 			em.getTransaction().commit();
 			em.close();
 			return true;
@@ -548,32 +558,32 @@ public class DichVu_DAO {
 //		}
 //
 //		return dsDV;
-		
+
 		try {
 			// Please help me customize that code and use to create native query
 			String sql = "select * from DichVu dv join ThongTinDichVu ttdv on dv.maThongTinDichVu = ttdv.maThongTinDichVu "
 					+ "WHERE ttdv.ngayNhap BETWEEN ? AND ? ";
-			
+
 			if (thang != 0) {
 				sql += " AND MONTH(ngayNhap) = ? ";
-            }
-			
+			}
+
 			if (nam != 0) {
 				sql += " AND YEAR(ngayNhap) = ? ";
-            }
-			
+			}
+
 			if (quy != 0) {
 				sql += " AND DATENAME(QUARTER, ngayNhap) = ? ";
-            }
-			
+			}
+
 			em.getTransaction().begin();
-			ArrayList<DichVu> ds = (ArrayList<DichVu>) em.createNativeQuery(sql, DichVu.class)
-                    .setParameter(1, ngayBD).setParameter(2, ngayKT).setParameter(3, thang).setParameter(4, nam)
-                    .setParameter(5, quy).getResultList();
-			
+			ArrayList<DichVu> ds = (ArrayList<DichVu>) em.createNativeQuery(sql, DichVu.class).setParameter(1, ngayBD)
+					.setParameter(2, ngayKT).setParameter(3, thang).setParameter(4, nam).setParameter(5, quy)
+					.getResultList();
+
 			em.close();
 			return ds;
-			
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

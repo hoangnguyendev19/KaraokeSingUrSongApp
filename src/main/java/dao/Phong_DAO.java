@@ -859,9 +859,17 @@ public class Phong_DAO {
 		
 		try {
 			String sql = "select count(maPhong) as Dem from Phong";
-			em.getTransaction().begin();
-			int dem = (int) em.createNativeQuery(sql).getSingleResult();
-			em.close();
+//			em.getTransaction().begin();
+
+			int dem = 0;
+			
+			Object obj = em.createNativeQuery(sql).getSingleResult();
+			if (obj != null) {
+				dem = Integer.parseInt(obj.toString());
+			}
+			
+//			em.getTransaction().commit();
+//			em.close();
 			return dem;
 		} catch (Exception e) {
 			e.printStackTrace();

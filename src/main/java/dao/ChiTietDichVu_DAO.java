@@ -211,7 +211,7 @@ public class ChiTietDichVu_DAO {
 			String sql = "SELECT * FROM ChiTietDichVu WHERE maHoaDon = ?";
 			em.getTransaction().begin();
 			ArrayList<ChiTietDichVu> danhSachCTDichVu = (ArrayList<ChiTietDichVu>) em
-					.createNativeQuery(sql, ChiTietDichVu.class).getResultList();
+					.createNativeQuery(sql, ChiTietDichVu.class).setParameter(1, maHD).getResultList();
 
 			em.close();
 			return danhSachCTDichVu;

@@ -44,7 +44,7 @@ public class LoaiPhong_DAO {
 		try {
 			String sql = "SELECT * FROM LoaiPhong";
 			em.getTransaction().begin();
-			ArrayList<LoaiPhong> list = (ArrayList<LoaiPhong>) em.createQuery(sql).getResultList();
+			ArrayList<LoaiPhong> list = (ArrayList<LoaiPhong>) em.createNativeQuery(sql).getResultList();
 			em.close();
 			return list;
 		} catch (Exception e) {

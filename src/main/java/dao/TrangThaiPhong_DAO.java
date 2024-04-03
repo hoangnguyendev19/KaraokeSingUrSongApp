@@ -39,7 +39,7 @@ public class TrangThaiPhong_DAO {
 		try {
 			String sql = "SELECT * FROM TrangThaiPhong";
 			em.getTransaction().begin();
-			ArrayList<TrangThaiPhong> list = (ArrayList<TrangThaiPhong>) em.createQuery(sql).getResultList();
+			ArrayList<TrangThaiPhong> list = (ArrayList<TrangThaiPhong>) em.createNativeQuery(sql).getResultList();
 			em.close();
 			return list;
 		} catch (Exception e) {

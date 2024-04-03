@@ -95,10 +95,11 @@ public class ThongTinDichVu_DAO {
 		try {
 			String sql = "SELECT * FROM ThongTinDichVu WHERE maThongTinDichVu = ?";
 			em.getTransaction().begin();
-			ThongTinDichVu ds = (ThongTinDichVu) em.createNativeQuery(sql, ThongTinDichVu.class).getSingleResult();
+			ThongTinDichVu ttdv = (ThongTinDichVu) em.createNativeQuery(sql, ThongTinDichVu.class)
+					.setParameter(1, maTTDichVu).getSingleResult();
 
 			em.close();
-			return ds;
+			return ttdv;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

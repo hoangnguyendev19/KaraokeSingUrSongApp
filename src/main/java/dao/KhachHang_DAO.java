@@ -47,7 +47,7 @@ public class KhachHang_DAO {
 		try {
 			String sql = "SELECT * FROM KhachHang";
 			em.getTransaction().begin();
-			ArrayList<KhachHang> list = (ArrayList<KhachHang>) em.createQuery(sql).getResultList();
+			ArrayList<KhachHang> list = (ArrayList<KhachHang>) em.createNativeQuery(sql).getResultList();
 			
 			em.close();
 			return list;

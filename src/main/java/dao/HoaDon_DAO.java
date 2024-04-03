@@ -990,7 +990,15 @@ public class HoaDon_DAO {
 			}
 
 			em.getTransaction().begin();
-			HashMap<String, String> hash_DV = (HashMap<String, String>) em.createNativeQuery(sql).getResultList();
+//			HashMap<String, String> hash_DV = (HashMap<String, String>) em.createNativeQuery(sql).getResultList();
+			// Please help me fix this above comment code 
+			HashMap<String, String> hash_DV = new HashMap<String, String>();
+			
+			ArrayList<Object[]> list = (ArrayList<Object[]>) em.createNativeQuery(sql).getResultList();
+			
+			for (Object[] objects : list) {
+				hash_DV.put((String) objects[0], (String) objects[1]);
+			}	
 
 			em.close();
 			return hash_DV;
@@ -1063,6 +1071,7 @@ public class HoaDon_DAO {
 
 			em.getTransaction().begin();
 			int tongHD = (int) em.createNativeQuery(sql).getSingleResult();
+			System.out.println("Tong Hoa Don"+ tongHD);
 
 			em.close();
 			return tongHD;
