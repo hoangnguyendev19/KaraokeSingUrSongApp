@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import jakarta.persistence.EntityManager;
@@ -134,8 +135,7 @@ public class HelpRamDomMa {
 //		}
 //		return maCot;
 		
-		// Please help me customize the code above to use JPA
-		EntityManager em = new ConnectDB().getEntityManager();
+		EntityManager em = ConnectDB.connect();
 		ArrayList<String> maCot = new ArrayList<>();
 		String sql = "";
 		if (tenBang.trim().equals("HoaDon")) {
@@ -147,13 +147,16 @@ public class HelpRamDomMa {
 					+ " ORDER BY thoiGianDatPhong DESC";
 		}
 		
-		maCot = (ArrayList<String>) em.createNativeQuery(sql).getResultList();
-		if (tenBang.trim().equals("HoaDon")) {
+		List<Object> res = em.createNativeQuery(sql).getResultList();
+		for (Object object : res) {
+			maCot.add(object.toString());
+		}
 
+		if (tenBang.trim().equals("HoaDon")) {
 			String ma = maCot.get(0);
 			for (int i = 0; i < maCot.size() - 1; i++) {
 				for (int j = i + 1; j < maCot.size(); j++) {
-					ma = soSanhMa(maCot.get(i), maCot.get(j));
+					ma = soSanhMa(maCot.get(i).toString(), maCot.get(j).toString());
 
 				}
 
@@ -164,7 +167,7 @@ public class HelpRamDomMa {
 			return maCot2;
 		}
 		
-		return maCot;	
+		return maCot;
 	}
 
 	public static String cutString(String x) {

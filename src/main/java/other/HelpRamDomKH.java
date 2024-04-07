@@ -72,7 +72,7 @@ public class HelpRamDomKH {
 		
 		// Please help me customize this comment code above to use JPA
 		
-		EntityManager em = new ConnectDB().getEntityManager();
+		EntityManager em = ConnectDB.connect();
 		ArrayList<String> maCot = new ArrayList<>();
 		String sql = "SELECT " + tenCot + " FROM " + tenBang;
 		try {

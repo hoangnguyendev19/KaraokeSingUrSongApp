@@ -1,15 +1,10 @@
 package other;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;import org.apache.commons.codec.binary.BaseNCodecOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
+import entity.Phong;
 import jakarta.persistence.EntityManager;
 
 
@@ -76,12 +71,16 @@ public class HelpRamDomMaPhong {
 //        }
 //		return maCot;
 		
-		// Please help me customize this comment code above to use JPA
-		EntityManager em = new ConnectDB().getEntityManager();
+		EntityManager em = ConnectDB.connect();
 		ArrayList<String> maCot = new ArrayList<>();
 		String sql = "SELECT maPhong FROM Phong";
 		try {
-			maCot = (ArrayList<String>) em.createNativeQuery(sql).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, Phong.class).getResultList();
+			
+			for (Object object : listObj) {
+				maCot.add(object.toString());
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

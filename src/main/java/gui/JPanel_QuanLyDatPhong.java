@@ -135,7 +135,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	private JTextField txtSoDienThoai;
 	private JTextField txt_maPhongTK;
 
-	private JComboBox cbo_loaiPhong;
+	private JComboBox<String> cbo_loaiPhong;
 
 	// panigation
 	private JLabel lblNewLabelDichVu;
@@ -166,7 +166,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	private JButton btnLamMoiDanhSachPhong;
 	private ArrayList<LoaiPhong> dsLoaiPhong;
 	private ArrayList<TrangThaiPhong> dsTrangThai;
-	private JComboBox cbo_trangThai;
+	private JComboBox<String> cbo_trangThai;
 	private JTextField txt_soDienThoaiTK;
 	private JPanel panel_2;
 	private JPanel panel_boxSLDaDat;
@@ -550,7 +550,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		panel_PhongBan.add(panel_TraCuuPhong);
 		panel_TraCuuPhong.setLayout(null);
 
-		cbo_loaiPhong = new JComboBox();
+		cbo_loaiPhong = new JComboBox<>();
 		cbo_loaiPhong.setBounds(127, 12, 120, 22);
 		panel_TraCuuPhong.add(cbo_loaiPhong);
 		cbo_loaiPhong.addItem("Tất cả");
@@ -593,7 +593,7 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 		lblTrngThiPhng.setBounds(10, 44, 112, 21);
 		panel_TraCuuPhong.add(lblTrngThiPhng);
 
-		cbo_trangThai = new JComboBox();
+		cbo_trangThai = new JComboBox<>();
 		cbo_trangThai.setBounds(127, 45, 120, 21);
 		panel_TraCuuPhong.add(cbo_trangThai);
 
@@ -818,28 +818,17 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 
 		try {
 			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
-			TrangThaiPhong_DAO DAO_TTP = new TrangThaiPhong_DAO();
-
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-
-		try {
-
-			LoaiPhong_DAO DAO_LP = new LoaiPhong_DAO();
 			TrangThaiPhong_DAO DAO_TTTP = new TrangThaiPhong_DAO();
 			dsLoaiPhong = DAO_LP.layTatCaLoaiPhong();
 			dsTrangThai = DAO_TTTP.layTatCaTrangThaiPhong();
 
-			dsTrangThai.forEach(ttp -> {
+			for (TrangThaiPhong ttp : dsTrangThai) {
 				cbo_trangThai.addItem(ttp.getTenTrangThai());
+			}
 
-			});
-
-			dsLoaiPhong.forEach(lp -> {
+			for (LoaiPhong lp : dsLoaiPhong) {
 				cbo_loaiPhong.addItem(lp.getTenLoaiPhong());
-			});
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1262,11 +1251,21 @@ public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 	}
 
 	public void timKiemTongHopPhong() {
-
 		try {
-
 			Phong_DAO dao = new Phong_DAO();
 
+			if (cbo_loaiPhong.getSelectedItem().equals(null)) {
+				JOptionPane.showMessageDialog(null, "Vui lòng chọn loại phòng", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+
+			if (cbo_trangThai.getSelectedItem().equals(null)) {
+				JOptionPane.showMessageDialog(null, "Vui lòng chọn trạng thái phòng", "Thông báo",
+						JOptionPane.INFORMATION_MESSAGE);
+				return;
+			}
+			
 			String tenLP = cbo_loaiPhong.getSelectedItem().toString();
 			String tenTTP = cbo_trangThai.getSelectedItem().toString();
 			String maP = txt_maPhongTK.getText().toString().trim();

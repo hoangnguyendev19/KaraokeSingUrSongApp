@@ -1,10 +1,5 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,13 +7,14 @@ import connectDB.ConnectDB;
 import entity.DichVu;
 import entity.ThongTinDichVu;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class DichVu_DAO {
 
 	private EntityManager em;
 
 	public DichVu_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public int soLuongDichVu() {
@@ -36,21 +32,14 @@ public class DichVu_DAO {
 //		return dem;
 
 		try {
-			// create native query
 			String sql = "select count(maDichVu) as Dem from DichVu";
-//			em.getTransaction().begin();
 			int dem = 0;
 
 			Object obj = em.createNativeQuery(sql).getSingleResult();
 			if (obj != null) {
 				dem = Integer.parseInt(obj.toString());
 			}
-			
-			System.out.println("so luong dich vu: " + dem);
 
-			
-//			em.getTransaction().commit();
-//			em.close();
 			return dem;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -99,12 +88,11 @@ public class DichVu_DAO {
 
 		try {
 			String sql = "select *from(select ROW_NUMBER() over (order by maDichVu)as STT,maDichVu,tenDichVu,donViTinh,donGia,trangThai,maThongTinDichVu from DichVu) as PhanTrang where PhanTrang.STT Between ? and ?";
-			em.getTransaction().begin();
-			ArrayList<DichVu> ds = (ArrayList<DichVu>) em.createNativeQuery(sql, DichVu.class).setParameter(1, fn)
-					.setParameter(2, ln).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, DichVu.class).setParameter(1, fn).setParameter(2, ln).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<DichVu> list = ConvertObjToEntity.convertToDichVuList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -141,11 +129,11 @@ public class DichVu_DAO {
 
 		try {
 			String sql = "SELECT * FROM DichVu";
-			em.getTransaction().begin();
-			ArrayList<DichVu> ds = (ArrayList<DichVu>) em.createNativeQuery(sql, DichVu.class).getResultList();
-
-			em.close();
-			return ds;
+			List<Object> listObj = em.createNativeQuery(sql, DichVu.class).getResultList();
+			
+			ArrayList<DichVu> list = ConvertObjToEntity.convertToDichVuList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -189,10 +177,10 @@ public class DichVu_DAO {
 
 		try {
 			String sql = "SELECT * FROM DichVu WHERE maDichVu = ?";
-			em.getTransaction().begin();
-			DichVu dv = (DichVu) em.createNativeQuery(sql, DichVu.class).setParameter(1, maDV).getSingleResult();
+			Object obj = em.createNativeQuery(sql, DichVu.class).setParameter(1, maDV).getResultList().stream().findFirst().orElse(null);
 
-			em.close();
+			DichVu dv = (DichVu) obj;
+			
 			return dv;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -236,10 +224,10 @@ public class DichVu_DAO {
 
 		try {
 			String sql = "SELECT * FROM DichVu WHERE tenDichVu = Like N'%?%'";
-			em.getTransaction().begin();
-			DichVu dv = (DichVu) em.createNativeQuery(sql, DichVu.class).setParameter(1, tenDichVuTK).getSingleResult();
+			Object obj = em.createNativeQuery(sql, DichVu.class).setParameter(1, tenDichVuTK).getResultList().stream().findFirst().orElse(null);
+			
+			DichVu dv = (DichVu) obj;
 
-			em.close();
 			return dv;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -284,12 +272,11 @@ public class DichVu_DAO {
 
 		try {
 			String sql = "SELECT * FROM DichVu WHERE tenDichVu = Like N'%?%'";
-			em.getTransaction().begin();
-			ArrayList<DichVu> ds = (ArrayList<DichVu>) em.createNativeQuery(sql, DichVu.class)
-					.setParameter(1, tenDichVuTK).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, DichVu.class).setParameter(1, tenDichVuTK).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<DichVu> list = ConvertObjToEntity.convertToDichVuList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -331,11 +318,15 @@ public class DichVu_DAO {
 					.setParameter(4, dichVu.getDonGia()).setParameter(5, dichVu.isTrangThai())
 					.setParameter(6, dichVu.getThongTinDichVu().getMaThongTinDichVu()).executeUpdate();
 
-			em.close();
+			
+			em.getTransaction().commit();
 			return result > 0;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -379,19 +370,15 @@ public class DichVu_DAO {
 					.setParameter(5, dichVu.getThongTinDichVu().getMaThongTinDichVu())
 					.setParameter(6, dichVu.getMaDichVu()).executeUpdate();
 
-			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
-				return 0;
-			}
-
 			em.getTransaction().commit();
-			em.close();
 			return result;
 		} catch (Exception e) {
 			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return 0;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -431,12 +418,11 @@ public class DichVu_DAO {
 					+ "JOIN ThongTinDichVu tt ON dv.maThongTinDichVu = tt.maThongTinDichVu\r\n" + "WHERE "
 					+ "tt.ngayNhap= ?\r\n" + "    AND dv.trangThai = ?\r\n" + "    AND dv.donGia BETWEEN ? AND ?";
 
-			em.getTransaction().begin();
-			ArrayList<DichVu> ds = (ArrayList<DichVu>) em.createNativeQuery(sql, DichVu.class).setParameter(1, ngayNhap)
-					.setParameter(2, trangThaiLoc).setParameter(3, giaBD).setParameter(4, giaKT).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, DichVu.class).setParameter(1, ngayNhap).setParameter(2, trangThaiLoc).setParameter(3, giaBD).setParameter(4, giaKT).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<DichVu> list = ConvertObjToEntity.convertToDichVuList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -467,22 +453,23 @@ public class DichVu_DAO {
 
 		try {
 			String sql = "DELETE FROM DichVu" + " WHERE maDichVu = ?";
-			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, dichVu.getMaDichVu()).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
+				
 				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -560,29 +547,38 @@ public class DichVu_DAO {
 //		return dsDV;
 
 		try {
-			// Please help me customize that code and use to create native query
+			boolean locTheoThang = false;
+			boolean locTheoNam = false;
+			boolean locTheoQuy = false;
+	
+			if (thang != 0)
+				locTheoThang = true;
+	
+			if (quy != 0)
+				locTheoQuy = true;
+	
+			if (nam != 0)
+				locTheoNam = true;
+	
 			String sql = "select * from DichVu dv join ThongTinDichVu ttdv on dv.maThongTinDichVu = ttdv.maThongTinDichVu "
-					+ "WHERE ttdv.ngayNhap BETWEEN ? AND ? ";
-
-			if (thang != 0) {
+					+ "WHERE ttdv.ngayNhap BETWEEN '" + ngayBD + "' AND '" + ngayKT + "' ";
+	
+			if (locTheoThang) {
 				sql += " AND MONTH(ngayNhap) = ? ";
 			}
-
-			if (nam != 0) {
+	
+			if (locTheoNam) {
 				sql += " AND YEAR(ngayNhap) = ? ";
 			}
-
-			if (quy != 0) {
+	
+			if (locTheoQuy) {
 				sql += " AND DATENAME(QUARTER, ngayNhap) = ? ";
 			}
 
-			em.getTransaction().begin();
-			ArrayList<DichVu> ds = (ArrayList<DichVu>) em.createNativeQuery(sql, DichVu.class).setParameter(1, ngayBD)
-					.setParameter(2, ngayKT).setParameter(3, thang).setParameter(4, nam).setParameter(5, quy)
-					.getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, DichVu.class).setParameter(1, thang).setParameter(2, nam).setParameter(3, quy).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<DichVu> list = ConvertObjToEntity.convertToDichVuList(listObj);
+			return list;
 
 		} catch (Exception e) {
 			// TODO: handle exception

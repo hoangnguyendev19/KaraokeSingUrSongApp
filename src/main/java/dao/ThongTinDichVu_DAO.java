@@ -1,22 +1,19 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
-import entity.DichVu;
 import entity.ThongTinDichVu;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class ThongTinDichVu_DAO {
 
 	private EntityManager em;
 
 	public ThongTinDichVu_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<ThongTinDichVu> layTatCaThongTinDichVu() {
@@ -45,14 +42,12 @@ public class ThongTinDichVu_DAO {
 //		return danhSachThongTinDichVu;
 
 		try {
-			// create native query
 			String sql = "SELECT * FROM ThongTinDichVu";
-			em.getTransaction().begin();
-			ArrayList<ThongTinDichVu> ds = (ArrayList<ThongTinDichVu>) em.createNativeQuery(sql, ThongTinDichVu.class)
+			List<Object> listObj = em.createNativeQuery(sql, ThongTinDichVu.class)
 					.getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<ThongTinDichVu> list = ConvertObjToEntity.convertToThongTinDichVuList(listObj);
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -94,11 +89,10 @@ public class ThongTinDichVu_DAO {
 
 		try {
 			String sql = "SELECT * FROM ThongTinDichVu WHERE maThongTinDichVu = ?";
-			em.getTransaction().begin();
-			ThongTinDichVu ttdv = (ThongTinDichVu) em.createNativeQuery(sql, ThongTinDichVu.class)
-					.setParameter(1, maTTDichVu).getSingleResult();
+			Object obj = em.createNativeQuery(sql, ThongTinDichVu.class)
+					.setParameter(1, maTTDichVu).getResultList().stream().findFirst().orElse(null);
 
-			em.close();
+			ThongTinDichVu ttdv = (ThongTinDichVu) obj;
 			return ttdv;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -143,18 +137,17 @@ public class ThongTinDichVu_DAO {
 					.executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
-
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -200,18 +193,17 @@ public class ThongTinDichVu_DAO {
 					.executeUpdate();
 			
 			if (result == 0) {
-				em.getTransaction().rollback();
-                em.close();
                 return 0;
             }
 			
 			em.getTransaction().commit();
-			em.close();
 			return result;
 		} catch (Exception e) {
-			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return 0;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -243,18 +235,17 @@ public class ThongTinDichVu_DAO {
 			int result = em.createNativeQuery(sql).setParameter(1, thongTinDichVu.getMaThongTinDichVu()).executeUpdate();
 			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+            em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 }

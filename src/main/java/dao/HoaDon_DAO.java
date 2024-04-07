@@ -1,15 +1,11 @@
 
 package dao;
 
-import java.security.Timestamp;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.HoaDon;
@@ -18,13 +14,14 @@ import entity.KhuyenMai;
 import entity.NhanVien;
 import entity.PhieuDatPhong;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class HoaDon_DAO {
 
 	private EntityManager em;
 
 	public HoaDon_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<HoaDon> layTatCaHoaDon() {
@@ -57,10 +54,10 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon";
-			em.getTransaction().begin();
-			ArrayList<HoaDon> ds = (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, HoaDon.class).getResultList();
 
-			em.close();
+			ArrayList<HoaDon> ds = ConvertObjToEntity.convertToHoaDonList(listObj);
+
 			return ds;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -103,11 +100,11 @@ public class HoaDon_DAO {
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE trangThai = 'Đã thanh toán' AND ngayLap BETWEEN '" + ngayBD
 					+ "' AND '" + ngayKT + "'";
-			em.getTransaction().begin();
-			ArrayList<HoaDon> ds = (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, HoaDon.class).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<HoaDon> list = ConvertObjToEntity.convertToHoaDonList(listObj);
+
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -151,10 +148,11 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE maHoaDon = ?";
-			em.getTransaction().begin();
-			HoaDon hd = (HoaDon) em.createNativeQuery(sql, HoaDon.class).setParameter(1, maHD).getSingleResult();
+			Object obj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, maHD).getResultList().stream()
+					.findFirst().orElse(null);
 
-			em.close();
+			HoaDon hd = (HoaDon) obj;
+
 			return hd;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -200,7 +198,10 @@ public class HoaDon_DAO {
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE maKhachHang = ?";
 			em.getTransaction().begin();
-			HoaDon hd = (HoaDon) em.createNativeQuery(sql, HoaDon.class).setParameter(1, maKH).getSingleResult();
+			Object obj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, maKH).getResultList().stream()
+					.findFirst().orElse(null);
+
+			HoaDon hd = (HoaDon) obj;
 
 			em.close();
 			return hd;
@@ -252,12 +253,11 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE maNhanVien = ?";
-			em.getTransaction().begin();
-			ArrayList<HoaDon> ds = (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).setParameter(1, nv)
-					.getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, nv).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<HoaDon> list = ConvertObjToEntity.convertToHoaDonList(listObj);
+
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -309,13 +309,13 @@ public class HoaDon_DAO {
 			String sql = "SELECT * FROM HoaDon WHERE maKhachHang = ? JOIN KhachHang ON HoaDon.maKhachHang = KhachHang.maKhachHang"
 					+ "WHERE KhachHang.hoTen LIKE ? OR KhachHang.soDienThoai LIKE ? OR KhachHang.maKhachHang LIKE ?";
 
-			em.getTransaction().begin();
-			ArrayList<HoaDon> ds = (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).setParameter(1, kh)
+			List<Object> listObj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, kh)
 					.setParameter(2, "%" + kh + "%").setParameter(3, "%" + kh + "%").setParameter(4, "%" + kh + "%")
 					.getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<HoaDon> list = ConvertObjToEntity.convertToHoaDonList(listObj);
+
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -359,10 +359,11 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE maNhanVien = ?";
-			em.getTransaction().begin();
-			HoaDon hd = (HoaDon) em.createNativeQuery(sql, HoaDon.class).setParameter(1, maNV).getSingleResult();
+			Object obj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, maNV).getResultList().stream()
+					.findFirst().orElse(null);
 
-			em.close();
+			HoaDon hd = (HoaDon) obj;
+
 			return hd;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -410,10 +411,10 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE trangThai = 'Đang chờ thanh toán' AND ngayLap = GETDATE() AND ngayLap <= DATEADD(HOUR, 0, GETDATE())";
-			em.getTransaction().begin();
-			HoaDon hd = (HoaDon) em.createNativeQuery(sql, HoaDon.class).getSingleResult();
+			Object obj = em.createNativeQuery(sql, HoaDon.class).getResultList().stream().findFirst().orElse(null);
 
-			em.close();
+			HoaDon hd = (HoaDon) obj;
+
 			return hd;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -458,10 +459,11 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE maPhieuDat = ?";
-			em.getTransaction().begin();
-			HoaDon hd = (HoaDon) em.createNativeQuery(sql, HoaDon.class).setParameter(1, maPhD).getSingleResult();
+			Object obj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, maPhD).getResultList().stream()
+					.findFirst().orElse(null);
 
-			em.close();
+			HoaDon hd = (HoaDon) obj;
+
 			return hd;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -506,11 +508,10 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE maKhuyenMai = ?";
-			em.getTransaction().begin();
+			Object obj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, maKhM).getResultList().stream().findFirst().orElse(null);
+			
+			HoaDon hd = (HoaDon) obj;
 
-			HoaDon hd = (HoaDon) em.createNativeQuery(sql, HoaDon.class).setParameter(1, maKhM).getSingleResult();
-
-			em.close();
 			return hd;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -608,7 +609,7 @@ public class HoaDon_DAO {
 //		return n > 0;
 
 		try {
-			String sql = "UPDATE HoaDon SET maKhachHang = ?, maNhanVien = ?, maPhieuDat = ?, maKhuyenMai = ?, ngayLap = ?, trangThai = ?, thoiGianKetThuc = ? WHERE maHoaDon = ? ";
+			String sql = "UPDATE HoaDon SET maKhachHang = ?, maNhanVien = ?, maPhieuDat = ?, maKhuyenMai = ?, ngayLap = ?, trangThai = N'?, thoiGianKetThuc = ? WHERE maHoaDon = ? ";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, hoaDon.getKhachHang().getMaKhachHang())
 					.setParameter(2, hoaDon.getNhanVien().getMaNhanVien())
@@ -715,12 +716,12 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon WHERE CONVERT(DATE, ngayLap) >= ? AND CONVERT(DATE, ngayLap) < ?";
-			em.getTransaction().begin();
-			ArrayList<HoaDon> ds = (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).setParameter(1, tuNgay)
+			List<Object> listObj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, tuNgay)
 					.setParameter(2, denNgay).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<HoaDon> list = ConvertObjToEntity.convertToHoaDonList(listObj);
+
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -769,12 +770,12 @@ public class HoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM HoaDon JOIN PhieuDatPhong ON HoaDon.maPhieuDat = PhieuDatPhong.maPhieuDat WHERE PhieuDatPhong.maPhieuDat LIKE ?";
-			em.getTransaction().begin();
-			ArrayList<HoaDon> ds = (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class)
-					.setParameter(1, "%" + pdp + "%").getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, "%" + pdp + "%")
+					.getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<HoaDon> list = ConvertObjToEntity.convertToHoaDonList(listObj);
+
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -822,12 +823,11 @@ public class HoaDon_DAO {
 //		return hoaDon;
 
 		try {
-			String sql = "SELECT * FROM HoaDon WHERE trangThai = ? and maPhong = ?";
-			em.getTransaction().begin();
-			HoaDon hd = (HoaDon) em.createNativeQuery(sql, HoaDon.class).setParameter(1, tt).setParameter(2, maPhong)
-					.getSingleResult();
+			String sql = "SELECT * FROM HoaDon WHERE trangThai = N'? and maPhong = ?";
+			Object obj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, tt).setParameter(2, maPhong).getResultList().stream().findFirst().orElse(null);
+			
+			HoaDon hd = (HoaDon) obj;
 
-			em.close();
 			return hd;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -873,13 +873,13 @@ public class HoaDon_DAO {
 //		return listHD;
 
 		try {
-			String sql = "SELECT * FROM HoaDon WHERE trangThai = ?";
-			em.getTransaction().begin();
-			ArrayList<HoaDon> ds = (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).setParameter(1, tt)
-					.getResultList();
+			String sql = "SELECT * FROM HoaDon WHERE trangThai = N'?"; 
+			
+			List<Object> listObj = em.createNativeQuery(sql, HoaDon.class).setParameter(1, tt).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<HoaDon> list = ConvertObjToEntity.convertToHoaDonList(listObj);
+
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -925,10 +925,14 @@ public class HoaDon_DAO {
 					+ "' \r\n" + "AND\r\n" + "hd.trangThai = N'Đã thanh toán'\r\n" + "GROUP BY lp.tenLoaiPhong\r\n"
 					+ "ORDER BY soLuongTK DESC;";
 
-			em.getTransaction().begin();
-			HashMap<String, String> hash_DV = (HashMap<String, String>) em.createNativeQuery(sql).getResultList();
+			HashMap<String, String> hash_DV = new HashMap<String, String>();
 
-			em.close();
+			List<?> results = em.createNativeQuery(sql).getResultList();
+
+			results.stream().map(o -> (Object[]) o).forEach(objects -> {
+				hash_DV.put((String) objects[0], String.valueOf(objects[1]));
+			});
+
 			return hash_DV;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -989,18 +993,14 @@ public class HoaDon_DAO {
 						+ "' \r\n" + "GROUP BY dv.maDichVu, dv.tenDichVu\r\n" + "ORDER BY kqTK DESC";
 			}
 
-			em.getTransaction().begin();
-//			HashMap<String, String> hash_DV = (HashMap<String, String>) em.createNativeQuery(sql).getResultList();
-			// Please help me fix this above comment code 
 			HashMap<String, String> hash_DV = new HashMap<String, String>();
-			
-			ArrayList<Object[]> list = (ArrayList<Object[]>) em.createNativeQuery(sql).getResultList();
-			
-			for (Object[] objects : list) {
-				hash_DV.put((String) objects[0], (String) objects[1]);
-			}	
 
-			em.close();
+			List<?> results = em.createNativeQuery(sql).getResultList();
+
+			results.stream().map(o -> (Object[]) o).forEach(objects -> {
+				hash_DV.put((String) objects[0], String.valueOf(objects[1]));
+			});
+
 			return hash_DV;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1031,10 +1031,10 @@ public class HoaDon_DAO {
 		try {
 			String sql = "SELECT COUNT(*) AS tongHD\r\n" + "FROM HoaDon\r\n" + "WHERE trangThai = N'Đã thanh toán'\r\n"
 					+ "AND\r\n" + "ngayLap BETWEEN '" + ngayBD + "' AND '" + ngayKT + "' ";
-			em.getTransaction().begin();
-			int tongHD = (int) em.createNativeQuery(sql).getSingleResult();
+			Object obj = em.createNativeQuery(sql).getSingleResult();
 
-			em.close();
+			int tongHD = Integer.parseInt(obj.toString());
+
 			return tongHD;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1069,11 +1069,10 @@ public class HoaDon_DAO {
 					+ "Join HoaDon hd on hd.maHoaDon = ctdv.maHoaDon\r\n" + "WHERE hd.trangThai = N'Đã thanh toán'"
 					+ "AND\r\n" + "ngayLap BETWEEN '" + ngayBD + "' AND '" + ngayKT + "' ";
 
-			em.getTransaction().begin();
-			int tongHD = (int) em.createNativeQuery(sql).getSingleResult();
-			System.out.println("Tong Hoa Don"+ tongHD);
+			Object obj = em.createNativeQuery(sql).getSingleResult();
 
-			em.close();
+			int tongHD = Integer.parseInt(obj.toString());
+
 			return tongHD;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -1172,11 +1171,11 @@ public class HoaDon_DAO {
 				sql += " AND DATENAME(QUARTER, thoiGianKetThuc) = ? ";
 			}
 
-			em.getTransaction().begin();
-			ArrayList<HoaDon> ds = (ArrayList<HoaDon>) em.createNativeQuery(sql, HoaDon.class).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, HoaDon.class).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<HoaDon> list = ConvertObjToEntity.convertToHoaDonList(listObj);
+
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();

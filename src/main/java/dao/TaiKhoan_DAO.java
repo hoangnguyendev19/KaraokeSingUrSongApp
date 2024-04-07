@@ -1,14 +1,9 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import connectDB.ConnectDB;
-import entity.NhanVien;
 import entity.TaiKhoan;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 /**
  * TaiKhoanDAO Le Minh Quang 20/10/2023
@@ -16,24 +11,10 @@ import jakarta.persistence.EntityManager;
 public class TaiKhoan_DAO {
 	private EntityManager em;
 
-	/**
-	 * @param maNhanVien
-	 * @param tenDangNhap
-	 * @param matKhau
-	 * @return boolean
-	 */
 	public TaiKhoan_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
-	/**
-	 * Tạo mới tài khoản
-	 * @param maNhanVien
-	 * @param tenDangNhap
-	 * @param matKhau
-	 * @param email
-	 * @return true / false
-	 */
 	public boolean taoMoiTaiKhoan(String maNhanVien, String tenDangNhap, String matKhau, String email) {
 	
 //		Connection con = ConnectDB.getInstance().getConnection();
@@ -57,27 +38,21 @@ public class TaiKhoan_DAO {
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, maNhanVien).setParameter(2, tenDangNhap)
 					.setParameter(3, matKhau).setParameter(4, true).setParameter(5, email).executeUpdate();
+			
 			if(result ==0 ) {
-                em.getTransaction().rollback();
-                em.close();
                 return false;
             }
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
-			em.close();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
-	/**
-	 * Tìm kiếm tài khoản theo tenDangNhap
-	 * @param tenDangNhap
-	 * @param matKhau
-	 * @return taiKhoan
-	 */
 	public TaiKhoan timKiemTaiKhoan(String tenDangNhap) {
 //		Connection con = ConnectDB.getInstance().getConnection();
 //		TaiKhoan taiKhoan = null;
@@ -103,25 +78,17 @@ public class TaiKhoan_DAO {
 		
 		try {
 			String sql = "SELECT * FROM TaiKhoan WHERE tenDangNhap = ?";
-			em.getTransaction().begin();
-			TaiKhoan taiKhoan = (TaiKhoan) em.createNativeQuery(sql, TaiKhoan.class).setParameter(1, tenDangNhap).getSingleResult();
-			em.close();
-			return taiKhoan;
+			Object obj = em.createNativeQuery(sql, TaiKhoan.class).setParameter(1, tenDangNhap).getResultList().stream().findFirst().orElse(null);
 			
+			TaiKhoan taiKhoan = (TaiKhoan) obj;
+			return taiKhoan;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			em.close();
 			return null;
 		}
 	}
 	
 
-	/**
-	 * Tìm kiếm tài khoản theo maNhanVien
-	 * @param maNV
-	 * @return taiKhoan
-	 */
 	public TaiKhoan timTaiKhoan_TheoMaNhanVien(String maNV) {
 //		TaiKhoan taiKhoan = null;
 //		ConnectDB.getInstance();
@@ -154,24 +121,17 @@ public class TaiKhoan_DAO {
 		
 		try {
 			String sql = "SELECT * FROM TaiKhoan WHERE maNhanVien = ?";
-			em.getTransaction().begin();
-			TaiKhoan taiKhoan = (TaiKhoan) em.createNativeQuery(sql, TaiKhoan.class).setParameter(1, maNV).getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, TaiKhoan.class).setParameter(1, maNV).getResultList().stream().findFirst().orElse(null);
+			
+			TaiKhoan taiKhoan = (TaiKhoan) obj;
 			return taiKhoan;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
-			em.close();
 			return null;
 		}
 	}
 
-	/**
-	 * Cập nhật tài khoản theo tenDangNhap
-	 * @param tenDangNhap
-	 * @param matKhau
-	 * @return true / false
-	 */
 	public boolean capNhatTaiKhoan_TheoTenDangNhap(String tenDangNhap, String matKhau) {
 //		Connection con = ConnectDB.getInstance().getConnection();
 //		int n = 0;
@@ -201,29 +161,21 @@ public class TaiKhoan_DAO {
 			String sql = "UPDATE TaiKhoan SET  matKhau = ? WHERE tenDangNhap = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, matKhau).setParameter(2, tenDangNhap).executeUpdate();
+			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
+			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			em.close();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
-	/**
-	 * Cập nhật tài khoản theo maNhanVien
-	 * @param tenDangNhap
-	 * @param maNhanVien
-	 * @param matKhau
-	 * @return taiKhoan
-	 */
 	public TaiKhoan capNhatTaiKhoan_TheoMaNhanVien(String tenDangNhap, String maNhanVien, String matKhau) {
 //		Connection con = ConnectDB.getInstance().getConnection();
 //		TaiKhoan taiKhoan = null;
@@ -249,32 +201,25 @@ public class TaiKhoan_DAO {
 			String sql = "UPDATE TaiKhoan SET  matKhau = ? WHERE maNhanVien = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, matKhau).setParameter(2, maNhanVien).executeUpdate();
-			TaiKhoan taiKhoan = (TaiKhoan) em.createNativeQuery("SELECT * FROM TaiKhoan WHERE maNhanVien = ?", TaiKhoan.class).setParameter(1, maNhanVien).getSingleResult();
 			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return null;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
+			Object obj = em.createNativeQuery("SELECT * FROM TaiKhoan WHERE maNhanVien = ?", TaiKhoan.class).setParameter(1, maNhanVien).getResultList().stream().findFirst().orElse(null);
+			
+			TaiKhoan taiKhoan = (TaiKhoan) obj;
 			return taiKhoan;
 		} catch (Exception e) {
-			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
-			em.close();
 			return null;
+		} finally {
+			em.close();
 		}
 	}
 	
-	/**
-	 * Cập nhật email theo maNhanVien
-	 * @param tenDangNhap
-	 * @param maNhanVien
-	 * @param email
-	 * @return taiKhoan
-	 */
 	public TaiKhoan capNhatEmail_TheoMaNhanVien(String tenDangNhap, String maNhanVien, String email) {
 //		Connection con = ConnectDB.getInstance().getConnection();
 //		TaiKhoan taiKhoan = null;
@@ -300,15 +245,16 @@ public class TaiKhoan_DAO {
 			String sql = "UPDATE TaiKhoan SET  email = ? WHERE maNhanVien = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, email).setParameter(2, maNhanVien).executeUpdate();
-			TaiKhoan taiKhoan = (TaiKhoan) em.createNativeQuery("SELECT * FROM TaiKhoan WHERE maNhanVien = ?", TaiKhoan.class).setParameter(1, maNhanVien).getSingleResult();
+			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return null;
 			}
 
 			em.getTransaction().commit();
-			em.close();
+			
+			Object obj = em.createNativeQuery("SELECT * FROM TaiKhoan WHERE maNhanVien = ?", TaiKhoan.class).setParameter(1, maNhanVien).getResultList().stream().findFirst().orElse(null);
+			
+			TaiKhoan taiKhoan = (TaiKhoan) obj;
 			return taiKhoan;
 		} catch (Exception e) {
 			em.getTransaction().rollback();
@@ -319,12 +265,6 @@ public class TaiKhoan_DAO {
 		
 	}
 	
-	/**
-	 * Cập nhật trạng thái theo maNhanVien
-	 * @param maNhanVien
-	 * @param trangThai
-	 * @return taiKhoan
-	 */
 	public TaiKhoan capNhatTrangThai_TheoMaNhanVien(String maNhanVien, Boolean trangThai) {
 //		Connection con = ConnectDB.getInstance().getConnection();
 //		TaiKhoan taiKhoan = null;
@@ -350,15 +290,16 @@ public class TaiKhoan_DAO {
 			String sql = "UPDATE TaiKhoan SET  trangThai = ? WHERE maNhanVien = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, trangThai).setParameter(2, maNhanVien).executeUpdate();
-			TaiKhoan taiKhoan = (TaiKhoan) em.createNativeQuery("SELECT * FROM TaiKhoan WHERE maNhanVien = ?", TaiKhoan.class).setParameter(1, maNhanVien).getSingleResult();
+			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return null;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
+
+			Object obj = em.createNativeQuery("SELECT * FROM TaiKhoan WHERE maNhanVien = ?", TaiKhoan.class).setParameter(1, maNhanVien).getResultList().stream().findFirst().orElse(null);
+			
+			TaiKhoan taiKhoan = (TaiKhoan) obj;
 			return taiKhoan;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -368,11 +309,6 @@ public class TaiKhoan_DAO {
 		}
 	}
 	
-	/**
-	 * Tìm tài khoản theo tenDangNhap
-	 * @param tenDangNhap
-	 * @return taiKhoan
-	 */
 	public TaiKhoan timTaiKhoan_TheoTenDangNhap(String tenDangNhap) {
 //		Connection con = ConnectDB.getInstance().getConnection();
 //		TaiKhoan taiKhoan = null;
@@ -398,9 +334,9 @@ public class TaiKhoan_DAO {
 		
 		try {
 			String sql = "SELECT * FROM TaiKhoan WHERE tenDangNhap = ?";
-			em.getTransaction().begin();
-			TaiKhoan taiKhoan = (TaiKhoan) em.createNativeQuery(sql, TaiKhoan.class).setParameter(1, tenDangNhap).getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, TaiKhoan.class).setParameter(1, tenDangNhap).getResultList().stream().findFirst().orElse(null);
+			
+			TaiKhoan taiKhoan = (TaiKhoan) obj;
 			return taiKhoan;
 		} catch (Exception e) {
 			// TODO: handle exception

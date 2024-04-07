@@ -1,26 +1,21 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
-
-import com.itextpdf.text.List;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.ChiTietDichVu;
 import entity.DichVu;
 import entity.HoaDon;
-import entity.Phong;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class ChiTietDichVu_DAO {
 
 	private EntityManager em;
 	
 	public ChiTietDichVu_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<ChiTietDichVu> layTatCaCTDichVu() {
@@ -45,11 +40,11 @@ public class ChiTietDichVu_DAO {
 		
 		try {
 			String sql = "SELECT * FROM ChiTietDichVu"; 
-			em.getTransaction().begin();
-			ArrayList<ChiTietDichVu> danhSachCTDichVu = (ArrayList<ChiTietDichVu>) em.createNativeQuery(sql, ChiTietDichVu.class).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, ChiTietDichVu.class).getResultList();
 			
-			em.close();
-			return danhSachCTDichVu;
+			ArrayList<ChiTietDichVu> list = ConvertObjToEntity.convertToChiTietDichVuList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -87,10 +82,10 @@ public class ChiTietDichVu_DAO {
 		
 		try {
 			String sql = "SELECT * FROM ChiTietDichVu WHERE maDichVu = ?"; 
-			em.getTransaction().begin();
-			ChiTietDichVu ctDichVu = (ChiTietDichVu) em.createNativeQuery(sql, ChiTietDichVu.class).getSingleResult();
+			Object obj = em.createNativeQuery(sql, ChiTietDichVu.class).setParameter(1, maDV).getResultList().stream().findFirst().orElse(null);
 			
-			em.close();
+			ChiTietDichVu ctDichVu = (ChiTietDichVu) obj;
+			
 			return ctDichVu;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -128,11 +123,11 @@ public class ChiTietDichVu_DAO {
 		
 		try {
 			String sql = "SELECT * FROM ChiTietDichVu WHERE maPhong = ? AND maHoaDon = ?";
-			em.getTransaction().begin();
-			ArrayList<ChiTietDichVu> danhSachCTDichVu = (ArrayList<ChiTietDichVu>) em.createNativeQuery(sql, ChiTietDichVu.class).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, ChiTietDichVu.class).getResultList();
 			
-			em.close();
-			return danhSachCTDichVu;
+			ArrayList<ChiTietDichVu> list = ConvertObjToEntity.convertToChiTietDichVuList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -169,13 +164,12 @@ public class ChiTietDichVu_DAO {
 		
 		try {
 			String sql = "SELECT * FROM ChiTietDichVu WHERE maHoaDon = ? AND maPhong = ?";
-			em.getTransaction().begin();
-			ArrayList<ChiTietDichVu> danhSachCTDichVu = (ArrayList<ChiTietDichVu>) em.createNativeQuery(sql, ChiTietDichVu.class).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, ChiTietDichVu.class).getResultList();
 			
-			em.close();
-			return danhSachCTDichVu;
+			ArrayList<ChiTietDichVu> list = ConvertObjToEntity.convertToChiTietDichVuList(listObj);
+			
+			return list;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			return null;
 		}
@@ -209,12 +203,11 @@ public class ChiTietDichVu_DAO {
 		
 		try {
 			String sql = "SELECT * FROM ChiTietDichVu WHERE maHoaDon = ?";
-			em.getTransaction().begin();
-			ArrayList<ChiTietDichVu> danhSachCTDichVu = (ArrayList<ChiTietDichVu>) em
-					.createNativeQuery(sql, ChiTietDichVu.class).setParameter(1, maHD).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, ChiTietDichVu.class).setParameter(1, maHD).getResultList();
 
-			em.close();
-			return danhSachCTDichVu;
+			ArrayList<ChiTietDichVu> list = ConvertObjToEntity.convertToChiTietDichVuList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -253,10 +246,10 @@ public class ChiTietDichVu_DAO {
 		
 		try {
 			String sql = "SELECT * FROM ChiTietDichVu WHERE maHoaDon = ?";
-			em.getTransaction().begin();
-			ChiTietDichVu ctDichVu = (ChiTietDichVu) em.createNativeQuery(sql, ChiTietDichVu.class).getSingleResult();
+			Object obj = em.createNativeQuery(sql, ChiTietDichVu.class).setParameter(1, maHD).getResultList().stream().findFirst().orElse(null);
 			
-			em.close();
+			ChiTietDichVu ctDichVu = (ChiTietDichVu) obj;
+			
 			return ctDichVu;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -296,10 +289,10 @@ public class ChiTietDichVu_DAO {
 		
 		try {
 			String sql = "SELECT * FROM ChiTietDichVu WHERE maHoaDon = ? AND maDichVu = ?";
-			em.getTransaction().begin();
-			ChiTietDichVu ctDichVu = (ChiTietDichVu) em.createNativeQuery(sql, ChiTietDichVu.class).getSingleResult();
+			Object obj = em.createNativeQuery(sql, ChiTietDichVu.class).setParameter(1, maHD).setParameter(2, maDV).getResultList().stream().findFirst().orElse(null);
 			
-			em.close();
+			ChiTietDichVu ctDichVu = (ChiTietDichVu) obj;
+			
 			return ctDichVu;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -338,18 +331,18 @@ public class ChiTietDichVu_DAO {
 			int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 			
 			if(result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -384,18 +377,18 @@ public class ChiTietDichVu_DAO {
 			int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -431,18 +424,18 @@ public class ChiTietDichVu_DAO {
 			int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -526,18 +519,18 @@ public class ChiTietDichVu_DAO {
 			int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -572,18 +565,18 @@ public class ChiTietDichVu_DAO {
 			int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -617,18 +610,18 @@ public class ChiTietDichVu_DAO {
 			int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -665,19 +658,18 @@ public class ChiTietDichVu_DAO {
 			int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
-		}
+		} finally {
+			em.close();
+		}	
 	}
 
 	public boolean xoaCTDichVu_TheoMaDichVu(ChiTietDichVu ctDichVu) {
@@ -710,18 +702,17 @@ public class ChiTietDichVu_DAO {
 			int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -756,17 +747,17 @@ public class ChiTietDichVu_DAO {
             int result = em.createNativeQuery(sql, ChiTietDichVu.class).executeUpdate();
 
             if (result == 0) {
-                em.getTransaction().rollback();
-                em.close();
                 return false;
             }
 
             em.getTransaction().commit();
-            em.close();
             return true;
         } catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
-        }
+		} finally {
+			em.close();
+		}
 	}
 }

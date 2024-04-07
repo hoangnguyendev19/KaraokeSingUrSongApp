@@ -1,20 +1,18 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.KhachHang;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class KhachHang_DAO {
 
 	private EntityManager em;
 	public KhachHang_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<KhachHang> layTatCaKhachHang() {
@@ -46,10 +44,10 @@ public class KhachHang_DAO {
 		
 		try {
 			String sql = "SELECT * FROM KhachHang";
-			em.getTransaction().begin();
-			ArrayList<KhachHang> list = (ArrayList<KhachHang>) em.createNativeQuery(sql).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, KhachHang.class).getResultList();
 			
-			em.close();
+			ArrayList<KhachHang> list = ConvertObjToEntity.convertToKhachHangList(listObj);
+			
 			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -95,9 +93,9 @@ public class KhachHang_DAO {
 		
 		try {
             String sql = "SELECT * FROM KhachHang WHERE maKhachHang = ?";
-            em.getTransaction().begin();
-            KhachHang kh = (KhachHang) em.createNativeQuery(sql, KhachHang.class).setParameter(1, maKH).getSingleResult();
-            em.close();
+            Object obj = em.createNativeQuery(sql, KhachHang.class).setParameter(1, maKH).getResultList().stream().findFirst().orElse(null);
+			
+			KhachHang kh = (KhachHang) obj;
             return kh;
         } catch (Exception e) {
         	e.printStackTrace();
@@ -144,10 +142,9 @@ public class KhachHang_DAO {
 		
 		try {
 			String sql = "SELECT * FROM KhachHang WHERE soDienThoai = ?";
-			em.getTransaction().begin();
-			KhachHang kh = (KhachHang) em.createNativeQuery(sql, KhachHang.class).setParameter(1, soDT)
-					.getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, KhachHang.class).setParameter(1, soDT).getResultList().stream().findFirst().orElse(null);
+			
+			KhachHang kh = (KhachHang) obj;
 			return kh;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -194,10 +191,9 @@ public class KhachHang_DAO {
 		
 		try {
 			String sql = "SELECT * FROM KhachHang WHERE soDienThoai = ?";
-			em.getTransaction().begin();
-			KhachHang kh = (KhachHang) em.createNativeQuery(sql, KhachHang.class).setParameter(1, SDT)
-					.getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, KhachHang.class).setParameter(1, SDT).getResultList().stream().findFirst().orElse(null);
+			
+			KhachHang kh = (KhachHang) obj;
 			return kh;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -243,9 +239,10 @@ public class KhachHang_DAO {
 		
 		try {
             String sql =	"SELECT * FROM KhachHang WHERE hoTen like N'% ? %'";
-            em.getTransaction().begin();
-            ArrayList<KhachHang> list = (ArrayList<KhachHang>) em.createNativeQuery(sql, KhachHang.class).setParameter(1, ten.trim()).getSingleResult();
-            em.close();
+            List<Object> listObj = em.createNativeQuery(sql, KhachHang.class).setParameter(1, ten.trim()).getResultList();
+            
+            ArrayList<KhachHang> list = ConvertObjToEntity.convertToKhachHangList(listObj);
+			
             return list;
         } catch (Exception e) {
         	e.printStackTrace();
@@ -289,18 +286,15 @@ public class KhachHang_DAO {
 					.setParameter(6, khachHang.getSoDienThoai()).setParameter(7, khachHang.getDiemThuong())
 					.setParameter(8, khachHang.getGhiChu()).executeUpdate();
 			if(result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			} 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
 		}
-		
 	}
 
 	public boolean capNhatKhachHang(KhachHang khachHang) {
@@ -342,15 +336,13 @@ public class KhachHang_DAO {
 					.setParameter(6, khachHang.getDiemThuong()).setParameter(7, khachHang.getGhiChu())
 					.setParameter(8, khachHang.getMaKhachHang()).executeUpdate();
 		    if(result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 		    }
 		    
 		    em.getTransaction().commit();
-		    em.close();
 		    return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
 		}
@@ -383,14 +375,12 @@ public class KhachHang_DAO {
 			int result = em.createNativeQuery(sql, KhachHang.class).setParameter(1, khachHang.getMaKhachHang())
 					.executeUpdate();
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
-			em.getTransaction().commit();
-			em.close();
+			em.getTransaction().commit();;
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
 		}

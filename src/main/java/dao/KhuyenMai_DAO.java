@@ -1,21 +1,18 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
-import entity.KhachHang;
 import entity.KhuyenMai;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class KhuyenMai_DAO {
 
 	private EntityManager em;
 	public KhuyenMai_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<KhuyenMai> layTatCaKhuyenMai() {
@@ -45,9 +42,9 @@ public class KhuyenMai_DAO {
 //		return danhSachKhuyenMai;
 		try {
 			String sql = "SELECT * FROM KhuyenMai";
-			em.getTransaction().begin();
-			ArrayList<KhuyenMai> list = (ArrayList<KhuyenMai>) em.createQuery(sql).getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, KhuyenMai.class).getResultList();
+			
+			ArrayList<KhuyenMai> list = ConvertObjToEntity.convertToKhuyenMaiList(listObj);
 			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -92,9 +89,9 @@ public class KhuyenMai_DAO {
 		
 		try {
             String sql = "SELECT * FROM KhuyenMai WHERE maKhuyenMai = ?";
-            em.getTransaction().begin();
-            KhuyenMai km = (KhuyenMai) em.createNativeQuery(sql, KhuyenMai.class).setParameter(1, maKM).getSingleResult();
-            em.close();
+            Object obj = em.createNativeQuery(sql, KhuyenMai.class).setParameter(1, maKM).getResultList().stream().findFirst().orElse(null);
+			
+			KhuyenMai km = (KhuyenMai) obj;
             return km;
         } catch (Exception e) {
         	e.printStackTrace();
@@ -138,10 +135,9 @@ public class KhuyenMai_DAO {
 		
 		try {
 			String sql = "SELECT * FROM KhuyenMai WHERE maGiamGia = ?";
-			em.getTransaction().begin();
-			KhuyenMai km = (KhuyenMai) em.createNativeQuery(sql, KhuyenMai.class).setParameter(1, maGG)
-					.getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, KhuyenMai.class).setParameter(1, maGG).getResultList().stream().findFirst().orElse(null);
+			
+			KhuyenMai km = (KhuyenMai) obj;
 			return km;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,14 +182,12 @@ public class KhuyenMai_DAO {
 					.setParameter(6, khuyenMai.getTongSoLuong()).setParameter(7, khuyenMai.getChietKhau())
 					.setParameter(8, khuyenMai.getMoTa()).executeUpdate();
 			if(result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			} 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
 		}
@@ -239,15 +233,15 @@ public class KhuyenMai_DAO {
 					.setParameter(4, khuyenMai.getNgayKetThuc()).setParameter(5, khuyenMai.getTongSoLuong())
 					.setParameter(6, khuyenMai.getChietKhau()).setParameter(7, khuyenMai.getMoTa())
 					.setParameter(8, khuyenMai.getMaKhuyenMai()).executeUpdate();
+			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
+			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
 		}
@@ -281,14 +275,13 @@ public class KhuyenMai_DAO {
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, khuyenMai.getMaKhuyenMai()).executeUpdate();
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
+			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
 		}

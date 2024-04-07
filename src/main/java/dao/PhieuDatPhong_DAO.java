@@ -1,34 +1,21 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import connectDB.ConnectDB;
-
-import java.sql.Date;
-
-import entity.KhachHang;
-import entity.LoaiPhong;
-import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
-import entity.TrangThaiPhong;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class PhieuDatPhong_DAO {
 
-//	private PhieuDatPhong phieuDatPhong;
-
 	private EntityManager em;
+	
 	public PhieuDatPhong_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<PhieuDatPhong> locPhieuDatPhong(String maPhieuDatLoc, String tenKhachHang, String maPhong,
@@ -71,11 +58,12 @@ public class PhieuDatPhong_DAO {
 					+ "?" + "%' AND maPhong LIKE '%" + "?" + "%' AND CAST(thoiGianNhanPhong AS DATE) = '"
 					+ "?" + "' AND kh.hoTen LIKE N'%" + "?" + "%' \r\n"
 					+ "AND kh.soDienThoai LIKE '%" + "?" + "%'";
-			 em.getTransaction().begin();
-			 ArrayList<PhieuDatPhong> list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1,maPhieuDatLoc)
+
+			 List<Object> listObj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1,maPhieuDatLoc)
 						.setParameter(2, maPhong).setParameter(3, thoiGianNhanPhongLoc)
-						.setParameter(4, tenKhachHang).setParameter(5,soDienThoai).getSingleResult();
-	         em.close();
+						.setParameter(4, tenKhachHang).setParameter(5,soDienThoai).getResultList();
+			 
+			 ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 	         return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -112,9 +100,9 @@ public class PhieuDatPhong_DAO {
 //		return danhSachPhieuDatPhong;
 		try {
 			String sql = "SELECT * FROM PhieuDatPhong ORDER BY thoiGianNhanPhong";
-			em.getTransaction().begin();
-			ArrayList<PhieuDatPhong> list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class).getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, PhieuDatPhong.class).getResultList();
+			
+			ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -160,10 +148,10 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql = "SELECT * FROM PhieuDatPhong WHERE maPhieuDat = ?";
-			em.getTransaction().begin();
-			PhieuDatPhong list = (PhieuDatPhong) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maPD).getSingleResult();
-			em.close();
-			return list;
+			Object obj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maPD).getResultList().stream().findFirst().orElse(null);
+			
+			PhieuDatPhong pdp = (PhieuDatPhong) obj;
+			return pdp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -207,10 +195,10 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql = "SELECT * FROM PhieuDatPhong WHERE maPhong = ?";
-			em.getTransaction().begin();
-			PhieuDatPhong list = (PhieuDatPhong) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maPh).getSingleResult();
-			em.close();
-			return list;
+			Object obj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maPh).getResultList().stream().findFirst().orElse(null);
+			
+			PhieuDatPhong pdp = (PhieuDatPhong) obj;
+			return pdp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -254,9 +242,9 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql = "SELECT * FROM PhieuDatPhong WHERE maNhanVien = ?";
-			em.getTransaction().begin();
-			PhieuDatPhong pdp = (PhieuDatPhong) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maNV).getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maNV).getResultList().stream().findFirst().orElse(null);
+			
+			PhieuDatPhong pdp = (PhieuDatPhong) obj;
 			return pdp;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -301,9 +289,9 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql = "SELECT * FROM PhieuDatPhong WHERE maKhachHang = ?";
-			em.getTransaction().begin();
-			PhieuDatPhong pdp = (PhieuDatPhong) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maKH).getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maKH).getResultList().stream().findFirst().orElse(null);
+			
+			PhieuDatPhong pdp = (PhieuDatPhong) obj;
 			return pdp;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -350,9 +338,9 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql = "SELECT * FROM PhieuDatPhong WHERE trangThai = ?";
-			em.getTransaction().begin();
-			ArrayList<PhieuDatPhong> list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, ttp).getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, ttp).getResultList();
+			
+			ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -405,10 +393,10 @@ public class PhieuDatPhong_DAO {
 			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong "
 					+ "JOIN KhachHang ON PhieuDatPhong.maKhachHang = KhachHang.maKhachHang "
 					+ "WHERE KhachHang.hoTen LIKE ? OR KhachHang.soDienThoai LIKE ?";
-			em.getTransaction().begin();
-			ArrayList<PhieuDatPhong> list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class)
+			List<Object> listObj = em.createNativeQuery(sql, PhieuDatPhong.class)
 					.setParameter(1, "%" + tenKH + "%").setParameter(2, "%" + tenKH + "%").getResultList();
-			em.close();
+			
+			ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -458,28 +446,16 @@ public class PhieuDatPhong_DAO {
 		try {
 			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong "
 					+ "JOIN Phong ON PhieuDatPhong.maPhong = Phong.maPhong " + "WHERE Phong.tenPhong LIKE ?";
-			em.getTransaction().begin();
-			ArrayList<PhieuDatPhong> list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class)
+			List<Object> listObj = em.createNativeQuery(sql, PhieuDatPhong.class)
 					.setParameter(1, "%" + tenP + "%").getResultList();
-			em.close();
+
+			ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-
-	/**
-	 * Tìm những phiếu đặt phòng thỏa thông tin truyền vào dưới đây
-	 *
-	 * @param tenPhong:     tên phòng
-	 * @param tenKhachHang: tên khách hàng
-	 * @param trangThai:    trạng thái
-	 * @param ngayDat:      ngày đặt
-	 * @return danh sách phiếu đặt phòng
-	 * 
-	 * 
-	 */
 
 	public ArrayList<Phong> danhSachPhongDat_theoPhieuDat(Timestamp ngayDat, String soGIoDuKien, String maloaiPhong) {
 //		ArrayList<Phong> dsPhong = new ArrayList<Phong>();
@@ -526,11 +502,12 @@ public class PhieuDatPhong_DAO {
 					+ "AND ABS( DATEDIFF(SECOND, PhieuDatPhong.thoiGianNhanPhong, cast('" + "?"
 					+ "' as dateTime))) <= 3600*" + "?" + "\r\n"
 					+ "AND CONVERT(date, thoiGianNhanPhong) <= CONVERT(date, '" + "?" + "')";
-			em.getTransaction().begin();
-			ArrayList<Phong> list = (ArrayList<Phong>) em.createNativeQuery(sql, Phong.class).setParameter(1, ngayDat)
+		
+			List<Object> listObj = em.createNativeQuery(sql, Phong.class).setParameter(1, ngayDat)
 					.setParameter(2, maloaiPhong).setParameter(3, ngayDat).setParameter(4, soGIoDuKien)
 					.setParameter(5, ngayDat).getResultList();
-			em.close();
+			
+			ArrayList<Phong> list = ConvertObjToEntity.convertToPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -589,22 +566,22 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql;
-			ArrayList<PhieuDatPhong> list;
+			List<Object> listObj = null;
 			if (ngayDat == null) {
 				sql = "SELECT PhieuDatPhong.* FROM KhachHang JOIN PhieuDatPhong ON KhachHang.maKhachHang = PhieuDatPhong.maKhachHang JOIN Phong ON PhieuDatPhong.maPhong = Phong.maPhong \n"
 						+ "where Phong.maPhong like '%" + "?" + "%' and KhachHang.maKhachHang like N'%" + "?"
 						+ "%' and PhieuDatPhong.trangThai like '%" + "?" + "%'" + "order by PhieuDatPhong.maPhieuDat";
-				list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maPhong).setParameter(2, maKhachHang).setParameter(3, trangThai).getResultList();
+				listObj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maPhong).setParameter(2, maKhachHang).setParameter(3, trangThai).getResultList();
 			} else {
 				sql = "SELECT PhieuDatPhong.* FROM KhachHang JOIN PhieuDatPhong ON KhachHang.maKhachHang = PhieuDatPhong.maKhachHang JOIN Phong ON PhieuDatPhong.maPhong = Phong.maPhong \n"
 						+ "where Phong.maPhong like '%" + "?" + "%' and KhachHang.maKhachHang like N'%" + "?"
 						+ "%' and PhieuDatPhong.trangThai like '%" + "?"
 						+ "%' and CONVERT(dateTime, thoiGianDatPhong) = CONVERT(dateTime, '" + "?" + "') "
 						+ "order by PhieuDatPhong.maPhieuDat";
-				list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maPhong).setParameter(2, maKhachHang).setParameter(3, trangThai).setParameter(4, ngayDat).getResultList();
+				listObj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maPhong).setParameter(2, maKhachHang).setParameter(3, trangThai).setParameter(4, ngayDat).getResultList();
 			}
-			em.getTransaction().begin();
-			em.close();
+
+			ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -612,7 +589,6 @@ public class PhieuDatPhong_DAO {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public ArrayList<PhieuDatPhong> layPhieuDatPhong_TheoNgayNhan(java.util.Date ngayNhan) {
 //		ArrayList<PhieuDatPhong> danhSachPhieuDatPhong = new ArrayList<PhieuDatPhong>();
 //		PhieuDatPhong phieuDatPhong = null;
@@ -653,9 +629,9 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong WHERE CONVERT(date, thoiGianNhanPhong) = ?";
-			em.getTransaction().begin();
-			ArrayList<PhieuDatPhong> list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, ngayNhan).getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, ngayNhan).getResultList();
+
+			ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -702,9 +678,9 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong WHERE maPhieuDat LIKE ?";
-			em.getTransaction().begin();
-			ArrayList<PhieuDatPhong> list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, "%" + ma + "%").getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, "%" + ma + "%").getResultList();
+
+			ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -756,9 +732,9 @@ public class PhieuDatPhong_DAO {
 		
 		try {
 			String sql = "SELECT PhieuDatPhong.* FROM PhieuDatPhong WHERE CONVERT(DATE, thoiGianNhanPhong) = ?";
-			em.getTransaction().begin();
-			ArrayList<PhieuDatPhong> list = (ArrayList<PhieuDatPhong>) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, new java.sql.Date(System.currentTimeMillis())).getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, new java.sql.Date(System.currentTimeMillis())).getResultList();
+			
+			ArrayList<PhieuDatPhong> list = ConvertObjToEntity.convertToPhieuDatPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -805,17 +781,19 @@ public class PhieuDatPhong_DAO {
 					.setParameter(6, phieuDatPhong.getThoiGianNhanPhong()).setParameter(7, phieuDatPhong.getTienCoc())
 					.setParameter(8, phieuDatPhong.getTrangThai()).setParameter(9, phieuDatPhong.getMoTa())
 					.executeUpdate();
+			
 			if(result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
+			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;	
+		} finally {
+			em.close();
 		}
 	}
 
@@ -861,15 +839,15 @@ public class PhieuDatPhong_DAO {
 					.setParameter(5, phieuDatPhong.getThoiGianNhanPhong()).setParameter(6, phieuDatPhong.getTienCoc())
 					.setParameter(7, phieuDatPhong.getTrangThai()).setParameter(8, phieuDatPhong.getMoTa())
 					.setParameter(9, phieuDatPhong.getMaPhieuDat()).executeUpdate();
+			
 			if(result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
+			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
 		}
@@ -923,10 +901,11 @@ public class PhieuDatPhong_DAO {
 					+ "      CAST(PD.thoiGianNhanPhong AS DATE) = CAST(GETDATE() AS DATE)\r\n"
 					+ "      AND PD.trangThai = N'Chờ nhận phòng'\r\n"
 					+ "      AND PD.thoiGianNhanPhong >= CONVERT(datetime, DATEADD(HOUR, 0, GETDATE()), 100)\r\n";
-			em.getTransaction().begin();
-			PhieuDatPhong phieuDatPhong = (PhieuDatPhong) em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maP).getSingleResult();
-			em.close();
-			return phieuDatPhong;
+			Object obj = em.createNativeQuery(sql, PhieuDatPhong.class).setParameter(1, maP).getResultList().stream().findFirst().orElse(null);
+			
+			PhieuDatPhong pdp = (PhieuDatPhong) obj;
+			
+			return pdp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -966,19 +945,20 @@ public class PhieuDatPhong_DAO {
 					+ "CAST(thoiGianNhanPhong AS DATE) = CAST(GETDATE() AS DATE)\r\n" + "AND\r\n"
 					+ "DATEADD(hour, 0, GETDATE()) <= thoiGianNhanPhong\r\n" + "AND\r\n"
 					+ "DATEDIFF(hour, thoiGianNhanPhong, GETDATE()) <= 1";
+			
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, maPhieuDat).executeUpdate();
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 
 	}
@@ -1009,17 +989,17 @@ public class PhieuDatPhong_DAO {
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, maPDP).executeUpdate();
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
-		} 
+		} finally {
+			em.close();
+		}
 	}
 
 }

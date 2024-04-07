@@ -1,21 +1,19 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.LoaiPhong;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class LoaiPhong_DAO {
 
-	private EntityManager  em;
-	
+	private EntityManager em;
+
 	public LoaiPhong_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<LoaiPhong> layTatCaLoaiPhong() {
@@ -40,12 +38,13 @@ public class LoaiPhong_DAO {
 //			e.printStackTrace();
 //		}
 //		return danhSachLoaiPhong;
-		
+
 		try {
 			String sql = "SELECT * FROM LoaiPhong";
-			em.getTransaction().begin();
-			ArrayList<LoaiPhong> list = (ArrayList<LoaiPhong>) em.createNativeQuery(sql).getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, LoaiPhong.class).getResultList();
+
+			ArrayList<LoaiPhong> list = ConvertObjToEntity.convertToLoaiPhongList(listObj);
+
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -83,20 +82,20 @@ public class LoaiPhong_DAO {
 //			}
 //		}
 //		return loaiPhong;
-		
+
 		try {
 			String sql = "SELECT * FROM LoaiPhong WHERE maLoaiPhong = ?";
-			em.getTransaction().begin();
-			LoaiPhong lp = (LoaiPhong) em.createNativeQuery(sql, LoaiPhong.class).setParameter(1, maLoaiP)
-					.getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, LoaiPhong.class).setParameter(1, maLoaiP).getResultList().stream()
+					.findFirst().orElse(null);
+
+			LoaiPhong lp = (LoaiPhong) obj;
 			return lp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public LoaiPhong layLoaiPhong_TheoTenLoaiPhong(String xtenLoaiPhong) {
 //		LoaiPhong loaiPhong = null;
 //		ConnectDB.getInstance();
@@ -127,13 +126,13 @@ public class LoaiPhong_DAO {
 //			}
 //		}
 //		return loaiPhong;
-		
+
 		try {
 			String sql = "SELECT * FROM LoaiPhong WHERE tenLoaiPhong = ?";
-			em.getTransaction().begin();
-			LoaiPhong lp = (LoaiPhong) em.createNativeQuery(sql, LoaiPhong.class).setParameter(1, xtenLoaiPhong)
-					.getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, LoaiPhong.class).setParameter(1, xtenLoaiPhong).getResultList()
+					.stream().findFirst().orElse(null);
+
+			LoaiPhong lp = (LoaiPhong) obj;
 			return lp;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -166,7 +165,7 @@ public class LoaiPhong_DAO {
 //			}
 //		}
 //		return n > 0;
-		
+
 		try {
 			String sql = "INSERT INTO LoaiPhong values(?,?,?,?,?,?)";
 			em.getTransaction().begin();
@@ -174,20 +173,19 @@ public class LoaiPhong_DAO {
 					.setParameter(2, loaiPhong.getTenLoaiPhong()).setParameter(3, loaiPhong.getSoLuongKhachToiDa())
 					.setParameter(4, loaiPhong.getGiaTien()).setParameter(5, loaiPhong.getHinhAnh())
 					.setParameter(6, loaiPhong.getMoTa()).executeUpdate();
-			
-			if (result ==  0) {
-				em.getTransaction().rollback();
-				em.close();
+
+			if (result == 0) {
 				return false;
 			}
-			
+
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -218,7 +216,7 @@ public class LoaiPhong_DAO {
 //			}
 //		}
 //		return n > 0;
-		
+
 		try {
 			String sql = "UPDATE LoaiPhong SET tenLoaiPhong = ?, soLuongKhachToiDa = ?, giaTien = ?, hinhAnh = ?, moTa = ?"
 					+ " WHERE maLoaiPhong = ?";
@@ -227,23 +225,22 @@ public class LoaiPhong_DAO {
 					.setParameter(2, loaiPhong.getSoLuongKhachToiDa()).setParameter(3, loaiPhong.getGiaTien())
 					.setParameter(4, loaiPhong.getHinhAnh()).setParameter(5, loaiPhong.getMoTa())
 					.setParameter(6, loaiPhong.getMaLoaiPhong()).executeUpdate();
-			
-			if (result ==  0) {
-				em.getTransaction().rollback();
-                em.close();
-                return false;
-            }
-			
+
+			if (result == 0) {
+				return false;
+			}
+
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
-	
+
 	public boolean xoaLoaiPhong(LoaiPhong loaiPhong) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -266,27 +263,26 @@ public class LoaiPhong_DAO {
 //			}
 //		}
 //		return n > 0;
-		
+
 		try {
-            String sql = "DELETE FROM LoaiPhong WHERE maLoaiPhong = ?";
-            
-            em.getTransaction().begin();
-            int result = em.createNativeQuery(sql).setParameter(1, loaiPhong.getMaLoaiPhong()).executeUpdate();
-            
-            if (result == 0) {
-                em.getTransaction().rollback();
-                em.close();
-                return false;
-            }
-            
-            em.getTransaction().commit();
-            em.close();
-            return true;
-        } catch (Exception e) {
+			String sql = "DELETE FROM LoaiPhong WHERE maLoaiPhong = ?";
+
+			em.getTransaction().begin();
+			int result = em.createNativeQuery(sql).setParameter(1, loaiPhong.getMaLoaiPhong()).executeUpdate();
+
+			if (result == 0) {
+				return false;
+			}
+
+			em.getTransaction().commit();
+			return true;
+		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
-        }
+		}
 	}
+
 	public ArrayList<LoaiPhong> timDStheoSoLuongVaGiaTien(String soLuong, String price) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -334,7 +330,7 @@ public class LoaiPhong_DAO {
 //			}
 //		}
 //		return danhSachLoaiPhong;
-		
+
 		try {
 			String sql = "SELECT * FROM LoaiPhong WHERE 1 = 1 ";
 			if (!soLuong.equals("Tất cả")) {
@@ -344,16 +340,17 @@ public class LoaiPhong_DAO {
 				sql += "AND giaTien <= ?";
 			}
 
-			em.getTransaction().begin();
-			ArrayList<LoaiPhong> list = (ArrayList<LoaiPhong>) em.createNativeQuery(sql, LoaiPhong.class)
+			List<Object> listObj = em.createNativeQuery(sql, LoaiPhong.class)
 					.setParameter(1, soLuong).setParameter(2, price).getResultList();
-			em.close();
+
+			ArrayList<LoaiPhong> list = ConvertObjToEntity.convertToLoaiPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
+
 	public ArrayList<LoaiPhong> timDSPhongTheoMaLPhong(String maLP) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -387,13 +384,13 @@ public class LoaiPhong_DAO {
 //		}
 //		return danhSachLoaiPhong;
 //	}
-		
+
 		try {
 			String sql = "SELECT * FROM LoaiPhong WHERE maLoaiPhong LIKE ?";
-			em.getTransaction().begin();
-			ArrayList<LoaiPhong> list = (ArrayList<LoaiPhong>) em.createNativeQuery(sql, LoaiPhong.class)
+			List<Object> listObj = em.createNativeQuery(sql, LoaiPhong.class)
 					.setParameter(1, "%" + maLP + "%").getResultList();
-			em.close();
+			
+			ArrayList<LoaiPhong> list = ConvertObjToEntity.convertToLoaiPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();

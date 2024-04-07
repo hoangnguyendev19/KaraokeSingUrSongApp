@@ -1,34 +1,21 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.LoaiNhanVien;
 import entity.NhanVien;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
-/**
- * NhanVien_DAO
- * 
- * @author THANH CUONG
- *
- */
 public class NhanVien_DAO {
 	private EntityManager em;
 
 	public NhanVien_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
-	/**
-	 * LayTatCaNhanVien
-	 * 
-	 * @return true/false
-	 */
 	public ArrayList<NhanVien> layTatCaNhanVien() {
 //		ArrayList<NhanVien> danhSachNhanVien = new ArrayList<NhanVien>();
 //		try {
@@ -59,10 +46,10 @@ public class NhanVien_DAO {
 
 		try {
 			String query = "SELECT * FROM NhanVien";
-			em.getTransaction().begin();
-			ArrayList<NhanVien> list = (ArrayList<NhanVien>) em.createNativeQuery(query, NhanVien.class)
-					.getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(query, NhanVien.class).getResultList();
+
+			ArrayList<NhanVien> list = ConvertObjToEntity.convertToNhanVienList(listObj);
+
 			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -72,12 +59,6 @@ public class NhanVien_DAO {
 		}
 	}
 
-	/**
-	 * TimNhanVienTheoMa
-	 * 
-	 * @param maNV
-	 * @return nhanVien
-	 */
 	public NhanVien timNhanVien_TheoMaNhanVien(String maNV) {
 //		NhanVien nhanVien = null;
 //		ConnectDB.getInstance();
@@ -118,16 +99,15 @@ public class NhanVien_DAO {
 
 		try {
 			String sql = "SELECT * FROM NhanVien where maNhanVien = ?";
-			em.getTransaction().begin();
-			NhanVien nv = (NhanVien) em.createNativeQuery(sql, NhanVien.class).setParameter(1, maNV).getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, NhanVien.class).setParameter(1, maNV).getResultList().stream()
+					.findFirst().orElse(null);
+
+			NhanVien nv = (NhanVien) obj;
 			return nv;
 		} catch (Exception e) {
-			em.close();
 			e.printStackTrace();
 			return null;
 		}
-
 	}
 
 	public NhanVien timNhanVien_TheoMaLoaiNhanVien(String maLoaiNV) {
@@ -167,15 +147,13 @@ public class NhanVien_DAO {
 //		return nhanVien;
 		try {
 			String sql = "SELECT * FROM NhanVien WHERE maLoaiNhanVien = ?";
-			em.getTransaction().begin();
-			NhanVien nv = (NhanVien) em.createNativeQuery(sql, NhanVien.class).setParameter(1, maLoaiNV)
-					.getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, NhanVien.class).setParameter(1, maLoaiNV).getResultList().stream()
+					.findFirst().orElse(null);
+
+			NhanVien nv = (NhanVien) obj;
 			return nv;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			em.close();
 			return null;
 		}
 	}
@@ -218,15 +196,13 @@ public class NhanVien_DAO {
 
 		try {
 			String sql = "SELECT * FROM NhanVien WHERE SoDienThoai = ?";
-			em.getTransaction().begin();
-			NhanVien nv = (NhanVien) em.createNativeQuery(sql, NhanVien.class).setParameter(1, soDT).getSingleResult();
-			em.close();
-			return nv;
+			Object obj = em.createNativeQuery(sql, NhanVien.class).setParameter(1, soDT).getResultList().stream()
+					.findFirst().orElse(null);
 
+			NhanVien nv = (NhanVien) obj;
+			return nv;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			em.close();
 			return null;
 		}
 	}
@@ -270,25 +246,17 @@ public class NhanVien_DAO {
 
 		try {
 			String sql = "SELECT * FROM NhanVien WHERE hoTen like N'%?%'";
-			em.getTransaction().begin();
-			ArrayList<NhanVien> list = (ArrayList<NhanVien>) em.createNativeQuery(sql, NhanVien.class)
-					.setParameter(1, ten).getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, NhanVien.class).setParameter(1, ten).getResultList();
+
+			ArrayList<NhanVien> list = ConvertObjToEntity.convertToNhanVienList(listObj);
+
 			return list;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			em.close();
 			return null;
 		}
 	}
 
-	/**
-	 * TaoNhanVien
-	 * 
-	 * @param nv
-	 * @return true / false
-	 */
 	public boolean taoNhanVien(NhanVien nhanVien) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -332,27 +300,20 @@ public class NhanVien_DAO {
 					.setParameter(9, nhanVien.getTrangThai()).setParameter(10, nhanVien.getAnhThe()).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
-			em.close();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
-	/**
-	 * CapNhatNhanVien
-	 * 
-	 * @param nv
-	 * @return true / false
-	 */
 	public boolean capNhatNhanVien(NhanVien nhanVien) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -399,27 +360,20 @@ public class NhanVien_DAO {
 					.setParameter(10, nhanVien.getMaNhanVien()).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			em.close();
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
-	/**
-	 * XoaNhanVien
-	 * 
-	 * @param nv
-	 * @return true / false
-	 */
 	public boolean xoaNhanVien(NhanVien nhanVien) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -449,36 +403,20 @@ public class NhanVien_DAO {
 
 			em.getTransaction().begin();
 
-			int ruslut = em.createNativeQuery(sql).setParameter(1, nhanVien.getMaNhanVien()).executeUpdate();
+			int result = em.createNativeQuery(sql).setParameter(1, nhanVien.getMaNhanVien()).executeUpdate();
 
-			if (ruslut == 0) {
-				em.getTransaction().rollback();
-				em.close();
+			if (result == 0) {
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			em.close();
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
-
-//	public boolean xoaNhanVien_TheoMaNhanVien(String maNV) {
-//		try {
-//			em.getTransaction().begin();
-//			NhanVien nv = em.find(NhanVien.class, maNV);
-//			em.remove(nv);
-//			em.getTransaction().commit();
-//			em.close();
-//			return true;
-//		} catch (Exception e) {
-//			em.close();
-//			e.printStackTrace();
-//			return false;
-//		}
-//	}
 }

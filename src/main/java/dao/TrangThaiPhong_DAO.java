@@ -1,21 +1,19 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
-import entity.KhuyenMai;
 import entity.TrangThaiPhong;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class TrangThaiPhong_DAO {
 
 	private EntityManager em;
+
 	public TrangThaiPhong_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<TrangThaiPhong> layTatCaTrangThaiPhong() {
@@ -38,16 +36,16 @@ public class TrangThaiPhong_DAO {
 //		return danhSachTrangThaiPhong;
 		try {
 			String sql = "SELECT * FROM TrangThaiPhong";
-			em.getTransaction().begin();
-			ArrayList<TrangThaiPhong> list = (ArrayList<TrangThaiPhong>) em.createNativeQuery(sql).getResultList();
-			em.close();
+			List<Object> listObj = em.createNativeQuery(sql, TrangThaiPhong.class).getResultList();
+
+			ArrayList<TrangThaiPhong> list = ConvertObjToEntity.convertToTrangThaiPhongList(listObj);
 			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public TrangThaiPhong timTrangThaiPhong_TheoMaTrangThai(String maTrThai) {
 //		TrangThaiPhong trangThaiPhong = null;
 //		ConnectDB.getInstance();
@@ -67,19 +65,20 @@ public class TrangThaiPhong_DAO {
 //			e.printStackTrace();
 //		}
 //		return trangThaiPhong;
-		
+
 		try {
 			String sql = "SELECT * FROM TrangThaiPhong WHERE maTrangThai = ?";
-			em.getTransaction().begin();
-			TrangThaiPhong ttp = (TrangThaiPhong) em.createNativeQuery(sql, TrangThaiPhong.class).setParameter(1, maTrThai).getSingleResult();
-            em.close();
-            return ttp;
+			Object obj = em.createNativeQuery(sql, TrangThaiPhong.class).setParameter(1, maTrThai).getResultList()
+					.stream().findFirst().orElse(null);
+
+			TrangThaiPhong ttp = (TrangThaiPhong) obj;
+			return ttp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public TrangThaiPhong timTrangThaiPhong_TheoTenTrangThai(String xTenTrThai) {
 //		TrangThaiPhong trangThaiPhong = null;
 //		ConnectDB.getInstance();
@@ -99,19 +98,20 @@ public class TrangThaiPhong_DAO {
 //			e.printStackTrace();
 //		}
 //		return trangThaiPhong;
-		
+
 		try {
 			String sql = "SELECT * FROM TrangThaiPhong WHERE tenTrangThai = ?";
-			em.getTransaction().begin();
-			TrangThaiPhong ttp = (TrangThaiPhong) em.createNativeQuery(sql, TrangThaiPhong.class).setParameter(1, xTenTrThai).getSingleResult();
-            em.close();
-            return ttp;
+			Object obj = em.createNativeQuery(sql, TrangThaiPhong.class).setParameter(1, xTenTrThai).getResultList()
+					.stream().findFirst().orElse(null);
+
+            TrangThaiPhong ttp = (TrangThaiPhong) obj;
+			return ttp;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	public boolean taoTrangThaiPhong(TrangThaiPhong trangThaiPhong) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -133,26 +133,27 @@ public class TrangThaiPhong_DAO {
 //			}
 //		}
 //		return n > 0;
-		
+
 		try {
 			String sql = "INSERT INTO TrangThaiPhong values(?,?)";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, trangThaiPhong.getMaTrangThai())
 					.setParameter(2, trangThaiPhong.getTenTrangThai()).executeUpdate();
-			if (result ==  0) {
-				em.getTransaction().rollback();
-				em.close();
+			
+			if (result == 0) {
 				return false;
 			}
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
-	
+
 	public boolean capNhatTrangThaiPhong(TrangThaiPhong trangThaiPhong) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -174,26 +175,27 @@ public class TrangThaiPhong_DAO {
 //			}
 //		}
 //		return n > 0;
-		
+
 		try {
 			String sql = "UPDATE TrangThaiPhong SET tenTrangThai = ? WHERE maTrangThai = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, trangThaiPhong.getTenTrangThai())
 					.setParameter(2, trangThaiPhong.getMaTrangThai()).executeUpdate();
-			if (result ==  0) {
-				em.getTransaction().rollback();
-				em.close();
+			
+			if (result == 0) {
 				return false;
 			}
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
-	
+
 	public boolean xoaTrangThaiPhong(TrangThaiPhong trangThaiPhong) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -215,22 +217,24 @@ public class TrangThaiPhong_DAO {
 //			}
 //		}
 //		return n > 0;
-		
+
 		try {
 			String sql = "DELETE FROM TrangThaiPhong WHERE maTrangThai = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, trangThaiPhong.getMaTrangThai()).executeUpdate();
+			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
+			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 }

@@ -260,7 +260,7 @@ public class JFrame_DangNhap extends JFrame implements ActionListener, KeyListen
 		}
 		// BUTTON EXIT
 		if (o.equals(btnExit)) {
-			dispose();
+			System.exit(0);
 		}
 	}
 

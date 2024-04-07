@@ -10,6 +10,7 @@ import dao.NhanVien_DAO;
 import dao.Phong_DAO;
 import entity.HoaDon;
 import entity.KhachHang;
+import entity.KhuyenMai;
 import entity.NhanVien;
 import entity.PhieuDatPhong;
 import entity.Phong;
@@ -411,14 +412,23 @@ public class JPanel_QuanLyHoaDon extends JPanel
 				KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
 				NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
 				if (hd.getPhieuDatPhong() != null) {
+//					Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
+//							hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+//							hd.getTrangThai(), hd.getThoiGianKetThuc() };
+					
 					Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
-							hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
+							hd.getPhieuDatPhong().getMaPhieuDat(), null, hd.getNgayLap(),
 							hd.getTrangThai(), hd.getThoiGianKetThuc() };
 					model.addRow(rowData);
 				} else {
+//					Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(), null,
+//							hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(), hd.getTrangThai(),
+//							hd.getThoiGianKetThuc() };
+					
 					Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(), null,
-							hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(), hd.getTrangThai(),
+							null, hd.getNgayLap(), hd.getTrangThai(),
 							hd.getThoiGianKetThuc() };
+					
 					model.addRow(rowData);
 				}
 
@@ -426,7 +436,6 @@ public class JPanel_QuanLyHoaDon extends JPanel
 		}
 	}
 
-	// Tìm kiếm theo mã khách hàng / họ tên / số điện thoại
 	public void TimKiemTheoKH() {
 		String khach = txtKH.getText();
 		ArrayList<HoaDon> dsHD = hd_DAO.layHoaDon_TheoKhachHang(khach);
@@ -571,6 +580,15 @@ public class JPanel_QuanLyHoaDon extends JPanel
 			for (HoaDon hd : dsHD) {
 				KhachHang kh = kh_DAO.layKhachHang_TheoMaKhachHang(hd.getKhachHang().getMaKhachHang());
 				NhanVien nv = nv_DAO.timNhanVien_TheoMaNhanVien(hd.getNhanVien().getMaNhanVien());
+				
+				if (hd.getKhuyenMai() == null) {
+					hd.setKhuyenMai(new KhuyenMai(null));
+				}
+				
+				if (hd.getPhieuDatPhong() == null) {
+					hd.setPhieuDatPhong(new PhieuDatPhong(null));
+				}
+				
 				Object[] rowData = { hd.getMaHoaDon(), kh.getHoTen(), nv.getHoTen(),
 						hd.getPhieuDatPhong().getMaPhieuDat(), hd.getKhuyenMai().getMaKhuyenMai(), hd.getNgayLap(),
 						hd.getTrangThai(), hd.getThoiGianKetThuc() };

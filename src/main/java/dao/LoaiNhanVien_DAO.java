@@ -1,31 +1,20 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.LoaiNhanVien;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
-/**
- * LoaiNhanVien_DAO
- * 
- * @author THANH CUONG
- *
- */
 public class LoaiNhanVien_DAO {
 	private EntityManager em;
 
 	public LoaiNhanVien_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
-	/**
-	 * @return danhSachLoaiNhanVien
-	 */
 	public ArrayList<LoaiNhanVien> layTatCaLoaiNhanVien() {
 //		ArrayList<LoaiNhanVien> danhSachLoaiNhanVien = new ArrayList<LoaiNhanVien>();
 //		try {
@@ -50,24 +39,18 @@ public class LoaiNhanVien_DAO {
 
 		try {
 			String sql = "SELECT * FROM LoaiNhanVien";
-			em.getTransaction().begin();
-			ArrayList<LoaiNhanVien> list = (ArrayList<LoaiNhanVien>) em.createNativeQuery(sql, LoaiNhanVien.class)
-					.getResultList();
-			em.close();
+
+			List<Object> listObj = em.createNativeQuery(sql, LoaiNhanVien.class).getResultList();
+
+			ArrayList<LoaiNhanVien> list = new ArrayList<LoaiNhanVien>();
 			return list;
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
-			em.close();
 			return null;
 
 		}
 	}
 
-	/**
-	 * @param maLoaiNV
-	 * @return loaiNhanVien
-	 */
 	public LoaiNhanVien layLoaiNhanVien_TheoMaLoaiNhanVien(String maLoaiNV) {
 //		LoaiNhanVien loaiNhanVien = null;
 //		ConnectDB.getInstance();
@@ -97,10 +80,9 @@ public class LoaiNhanVien_DAO {
 
 		try {
 			String sql = "SELECT * FROM LoaiNhanVien WHERE maLoaiNhanVien = ?";
-			em.getTransaction().begin();
-			LoaiNhanVien loaiNhanVien = (LoaiNhanVien) em.createNativeQuery(sql, LoaiNhanVien.class)
-					.setParameter(1, maLoaiNV).getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, LoaiNhanVien.class).setParameter(1, maLoaiNV).getResultList().stream().findFirst().orElse(null);
+			
+			LoaiNhanVien loaiNhanVien = (LoaiNhanVien) obj;
 			return loaiNhanVien;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -143,10 +125,9 @@ public class LoaiNhanVien_DAO {
 
 		try {
 			String sql = "SELECT * FROM LoaiNhanVien WHERE tenLoaiNhanVien = ?";
-			em.getTransaction().begin();
-			LoaiNhanVien loaiNhanVien = (LoaiNhanVien) em.createNativeQuery(sql, LoaiNhanVien.class)
-					.setParameter(1, xTenLoaiNV).getSingleResult();
-			em.close();
+			Object obj = em.createNativeQuery(sql, LoaiNhanVien.class).setParameter(1, xTenLoaiNV).getResultList().stream().findFirst().orElse(null);
+
+			LoaiNhanVien loaiNhanVien = (LoaiNhanVien) obj;
 			return loaiNhanVien;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -156,11 +137,7 @@ public class LoaiNhanVien_DAO {
 		}
 	}
 
-	/**
-	 * Thêm loại nhân viên
-	 * @param loaiNhanVien
-	 * @return true / false
-	 */
+
 	public boolean taoLoaiNhanVien(LoaiNhanVien loaiNhanVien) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -188,28 +165,22 @@ public class LoaiNhanVien_DAO {
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, loaiNhanVien.getMaLoaiNhanVien())
 					.setParameter(2, loaiNhanVien.getTenLoaiNhanVien()).executeUpdate();
+			
 			if(result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			em.getTransaction().rollback();
-			em.close();		
+			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
-	/**
-	 * Cập nhật loại nhân viên
-	 * @param loaiNhanVien
-	 * @return true / false
-	 */
 	public boolean capNhatLoaiNhanVien(LoaiNhanVien loaiNhanVien) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -239,27 +210,19 @@ public class LoaiNhanVien_DAO {
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, loaiNhanVien.getTenLoaiNhanVien())
 					.setParameter(2, loaiNhanVien.getMaLoaiNhanVien()).executeUpdate();
+			
             if(result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
             }
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
 			em.getTransaction().rollback();
-			em.close();
+			e.printStackTrace();
 			return false;
 		}
 	}
 
-	/**
-	 * Xóa loại nhân viên
-	 * @param loaiNhanVien
-	 * @return
-	 */
 	public boolean xoaLoaiNhanVien(LoaiNhanVien loaiNhanVien) {
 //		ConnectDB.getInstance();
 //		Connection con = ConnectDB.getConnection();
@@ -285,22 +248,19 @@ public class LoaiNhanVien_DAO {
 			String sql = "DELETE FROM LoaiNhanVien WHERE maLoaiNhanVien = ?";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, loaiNhanVien.getMaLoaiNhanVien()).executeUpdate();
+			
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 			
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
 			em.getTransaction().rollback();
-			em.close();
+			e.printStackTrace();
 			return false;
-		}
-		
+		} finally {
+			em.close();
+		}	
 	}
 }

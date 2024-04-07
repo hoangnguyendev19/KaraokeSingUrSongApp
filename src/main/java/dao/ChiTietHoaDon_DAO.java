@@ -1,23 +1,21 @@
 package dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import connectDB.ConnectDB;
 import entity.ChiTietHoaDon;
 import entity.HoaDon;
 import entity.Phong;
 import jakarta.persistence.EntityManager;
+import other.ConvertObjToEntity;
 
 public class ChiTietHoaDon_DAO {
 
 	private EntityManager em;
 
 	public ChiTietHoaDon_DAO() {
-		em = new ConnectDB().getEntityManager();
+		em = ConnectDB.connect();
 	}
 
 	public ArrayList<ChiTietHoaDon> layTatCaChiTietHoaDon() {
@@ -42,14 +40,12 @@ public class ChiTietHoaDon_DAO {
 //		return danhSachHoaDon;
 
 		try {
-			// create native query
 			String sql = "SELECT * FROM ChiTietHoaDon";
-			em.getTransaction().begin();
-			ArrayList<ChiTietHoaDon> ds = (ArrayList<ChiTietHoaDon>) em.createNativeQuery(sql, ChiTietHoaDon.class)
-					.getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, ChiTietHoaDon.class).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<ChiTietHoaDon> list = ConvertObjToEntity.convertToChiTietHoaDonList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
@@ -89,11 +85,11 @@ public class ChiTietHoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM ChiTietHoaDon WHERE maHoaDon = ? AND maPhong = ?";
-			em.getTransaction().begin();
-			ChiTietHoaDon cthd = (ChiTietHoaDon) em.createNativeQuery(sql, ChiTietHoaDon.class).setParameter(1, maHD)
-					.setParameter(2, maPh).getSingleResult();
+			Object obj = em.createNativeQuery(sql, ChiTietHoaDon.class).setParameter(1, maHD)
+					.setParameter(2, maPh).getResultList().stream().findFirst().orElse(null);
 
-			em.close();
+			ChiTietHoaDon cthd = (ChiTietHoaDon) obj;
+			
 			return cthd;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -135,12 +131,11 @@ public class ChiTietHoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM ChiTietHoaDon WHERE maHoaDon = ?";
-			em.getTransaction().begin();
-			ArrayList<ChiTietHoaDon> ds = (ArrayList<ChiTietHoaDon>) em.createNativeQuery(sql, ChiTietHoaDon.class)
-					.setParameter(1, maHD).getResultList();
+			List<Object> listObj = em.createNativeQuery(sql, ChiTietHoaDon.class).setParameter(1, maHD).getResultList();
 
-			em.close();
-			return ds;
+			ArrayList<ChiTietHoaDon> list = ConvertObjToEntity.convertToChiTietHoaDonList(listObj);
+			
+			return list;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -182,11 +177,10 @@ public class ChiTietHoaDon_DAO {
 
 		try {
 			String sql = "SELECT * FROM ChiTietHoaDon WHERE maPhong = ?";
-			em.getTransaction().begin();
-			ChiTietHoaDon cthd = (ChiTietHoaDon) em.createNativeQuery(sql, ChiTietHoaDon.class).setParameter(1, maPhong)
-					.getSingleResult();
-
-			em.close();
+			Object obj = em.createNativeQuery(sql, ChiTietHoaDon.class).setParameter(1, maPhong)
+					.getResultList().stream().findFirst().orElse(null);
+			
+			ChiTietHoaDon cthd = (ChiTietHoaDon) obj;
 			return cthd;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -225,18 +219,17 @@ public class ChiTietHoaDon_DAO {
 					.setParameter(2, ctHoaDon.getPhong().getMaPhong()).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -272,18 +265,17 @@ public class ChiTietHoaDon_DAO {
 					.setParameter(2, ctHoaDon.getHoaDon().getMaHoaDon()).setParameter(3, maPhongCu).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
-			// TODO: handle exception
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
+		} finally {
+			em.close();
 		}
 	}
 
@@ -316,18 +308,17 @@ public class ChiTietHoaDon_DAO {
 					.setParameter(2, ctHoaDon.getPhong().getMaPhong()).executeUpdate();
 
 			if (result == 0) {
-				em.getTransaction().rollback();
-				em.close();
 				return false;
 			}
 
 			em.getTransaction().commit();
-			em.close();
 			return true;
 		} catch (Exception e) {
+			em.getTransaction().rollback();
 			e.printStackTrace();
 			return false;
-
+		} finally {
+			em.close();
 		}
 	}
 }

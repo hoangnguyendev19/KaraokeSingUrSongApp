@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode(of = {"hoaDon", "dichVu"})
+@EqualsAndHashCode(of = {"hoaDon", "dichVu", "phong"})
 public class ChiTietDichVuId implements Serializable{
 	private HoaDon hoaDon;
 	private DichVu dichVu;
+	private Phong phong;
 }

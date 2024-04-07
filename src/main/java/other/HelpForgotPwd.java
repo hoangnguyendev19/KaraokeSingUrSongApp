@@ -53,8 +53,7 @@ public class HelpForgotPwd {
 //			HelpEmail.sendMail(email, "Gửi từ SingUrSong karaoke", "Mã xác nhận của bạn là: " + newPwd);
 //		}
 		
-		// Please help me customize this comment code above to use JPA
-		EntityManager em = new ConnectDB().getEntityManager();
+		EntityManager em = ConnectDB.connect();
 		String newPwd = generateRandomString();
 		int n = 0;
 		try {
