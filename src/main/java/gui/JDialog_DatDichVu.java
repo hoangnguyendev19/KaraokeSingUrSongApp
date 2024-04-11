@@ -478,8 +478,8 @@ public class JDialog_DatDichVu extends JFrame implements ActionListener {
 		}
 		if (o.equals(btn_xacNhan)) {
 
-			boolean checkresult = DAO_CTDV.xoaCTDichVu_TheoMaHoaDon_TheoMaPhong(hoaDon.getMaHoaDon(),
-					phong.getMaPhong());
+//			boolean checkresult = DAO_CTDV.xoaCTDichVu_TheoMaHoaDon_TheoMaPhong(hoaDon.getMaHoaDon(),
+//					phong.getMaPhong());
 
 			for (int i = 0; i < table_dvDatPhong.getRowCount(); i++) {
 

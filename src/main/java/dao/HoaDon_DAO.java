@@ -551,12 +551,13 @@ public class HoaDon_DAO {
 //		return n > 0;
 
 		try {
+			String maPhieuDat = hoaDon.getPhieuDatPhong() != null ? hoaDon.getPhieuDatPhong().getMaPhieuDat() : null;
 			String sql = "INSERT INTO HoaDon values(?,?,?,?,?,?,?,?)";
 			em.getTransaction().begin();
 			int result = em.createNativeQuery(sql).setParameter(1, hoaDon.getMaHoaDon())
 					.setParameter(2, hoaDon.getKhachHang().getMaKhachHang())
 					.setParameter(3, hoaDon.getNhanVien().getMaNhanVien())
-					.setParameter(4, hoaDon.getPhieuDatPhong().getMaPhieuDat())
+					.setParameter(4, maPhieuDat)
 					.setParameter(5, hoaDon.getKhuyenMai().getMaKhuyenMai()).setParameter(6, hoaDon.getNgayLap())
 					.setParameter(7, hoaDon.getTrangThai()).setParameter(8, hoaDon.getThoiGianKetThuc())
 					.executeUpdate();

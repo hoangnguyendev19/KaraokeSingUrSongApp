@@ -1,38 +1,48 @@
 package gui;
 
-import javax.swing.JPanel;
-
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
-
-import javax.swing.JLabel;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.geom.RoundRectangle2D;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.regex.Pattern;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.SpinnerDateModel;
+import javax.swing.SwingConstants;
 import javax.swing.border.AbstractBorder;
-import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
-import dao.ChiTietDichVu_DAO;
 import dao.ChiTietHoaDon_DAO;
 import dao.DichVu_DAO;
 import dao.HoaDon_DAO;
 import dao.KhachHang_DAO;
-import dao.LoaiNhanVien_DAO;
 import dao.LoaiPhong_DAO;
-import dao.PhieuDatPhong_DAO;
 import dao.Phong_DAO;
 import dao.TrangThaiPhong_DAO;
 import entity.ChiTietHoaDon;
@@ -42,65 +52,9 @@ import entity.KhachHang;
 import entity.KhuyenMai;
 import entity.LoaiPhong;
 import entity.NhanVien;
-import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.TrangThaiPhong;
-import gui.JFrame_ThuNgan.RoundedTransparentBorder;
-import other.HelpDate;
 import other.HelpRamDomMa;
-
-import javax.swing.JTabbedPane;
-import javax.swing.UIManager;
-
-import java.awt.FlowLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JTextField;
-import javax.swing.SwingConstants;
-import javax.swing.JTable;
-import javax.swing.JSplitPane;
-import javax.swing.JInternalFrame;
-import javax.swing.JScrollBar;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JTree;
-import javax.swing.SpinnerDateModel;
-import javax.swing.JSpinner;
-import javax.swing.JList;
-import javax.swing.JPasswordField;
-import javax.swing.JSlider;
-import javax.swing.JSeparator;
-import javax.swing.JProgressBar;
-import javax.swing.JFormattedTextField;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-import javax.swing.JScrollPane;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import javax.swing.text.JTextComponent;
-
-import org.apache.poi.util.SystemOutLogger;
-
-import com.ctc.wstx.shaded.msv_core.verifier.identity.Matcher;
-import com.itextpdf.text.List;
-
-import javax.swing.AbstractButton;
-import javax.swing.ImageIcon;
-import java.awt.GridLayout;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.ActionEvent;
-import javax.swing.JComboBox;
-import javax.swing.border.EtchedBorder;
-import javax.swing.BoxLayout;
-import javax.swing.SpringLayout;
-import com.toedter.calendar.JDateChooser;
-import javax.swing.border.LineBorder;
-import javax.swing.border.EmptyBorder;
 
 public class JPanel_QuanLyDatPhong extends JPanel implements ActionListener {
 

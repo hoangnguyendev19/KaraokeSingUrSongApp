@@ -1,26 +1,21 @@
 package gui;
 
-import java.awt.Component;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
-import java.util.ResourceBundle;
 
-import javax.print.DocFlavor.URL;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import dao.ThongTinDichVu_DAO;
 import entity.DichVu;
 import entity.ThongTinDichVu;
-
-import javax.swing.border.LineBorder;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JButton;
 
 public class JPanel_CardDichVu extends JPanel {
 	private DichVu dichVu;

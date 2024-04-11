@@ -1,8 +1,8 @@
 package gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ItemEvent;
@@ -15,6 +15,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.ImageIcon;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -26,9 +28,6 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-import org.apache.poi.ss.usermodel.Table;
-
-import dao.ChiTietDichVu_DAO;
 import dao.ChiTietHoaDon_DAO;
 import dao.HoaDon_DAO;
 import dao.KhachHang_DAO;
@@ -47,10 +46,6 @@ import entity.PhieuDatPhong;
 import entity.Phong;
 import entity.TrangThaiPhong;
 import other.HelpRamDomMa;
-
-import javax.swing.ImageIcon;
-import javax.swing.JCheckBox;
-import java.awt.Font;
 
 /**
  * CardPhong
@@ -238,7 +233,6 @@ public class JPanel_CardPhong extends JPanel {
 	}
 
 	private void showPopupMenu(MouseEvent e) {
-
 		DAO_PDP = new PhieuDatPhong_DAO();
 		DAO_NV = new NhanVien_DAO();
 		DAO_P = new Phong_DAO();
@@ -252,10 +246,10 @@ public class JPanel_CardPhong extends JPanel {
 		phieu = new PhieuDatPhong();
 		hd = new HoaDon();
 
-		dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
-		dsHoaDon = DAO_HD.layTatCaHoaDon();
-		dsPhong = DAO_P.layTatCaPhong();
-		dsChiTietHoaDon = DAO_CTHD.layTatCaChiTietHoaDon();
+//		dsPhieuDatPhong = DAO_PDP.layTatCaPhieuDatPhong();
+//		dsHoaDon = DAO_HD.layTatCaHoaDon();
+//		dsPhong = DAO_P.layTatCaPhong();
+//		dsChiTietHoaDon = DAO_CTHD.layTatCaChiTietHoaDon();
 		dao_TrangThaiPhong = new TrangThaiPhong_DAO();
 
 		JPopupMenu menu = new JPopupMenu();
@@ -290,9 +284,6 @@ public class JPanel_CardPhong extends JPanel {
 
 		}
 		nhanPhongMenuItem.addActionListener(e1 -> {
-
-			PhieuDatPhong_DAO DAO_PDP = new PhieuDatPhong_DAO();
-			HoaDon_DAO DAO_HD = new HoaDon_DAO();
 			try {
 				PhieuDatPhong pdp = DAO_PDP.layThongTinPhieuDatTrangThai_DangCho_MaPhong(phong.getMaPhong());
 
@@ -311,8 +302,12 @@ public class JPanel_CardPhong extends JPanel {
 		});
 		traPhongMenuItem.addActionListener(e1 -> {
 			try {
-				DAO_HD = new HoaDon_DAO();
 				hoaDon = DAO_HD.layHoaDon_DangChoThanhToan(phong.getMaPhong());
+				if (hoaDon.getKhachHang() == null) {
+					JOptionPane.showMessageDialog(null, "Phòng này chưa được đặt!");
+					return;
+				}	
+				
 				JDialog_ThanhToan thanhToan = new JDialog_ThanhToan(hoaDon, phong, loaiP, hoaDon.getKhachHang());
 				thanhToan.setVisible(true);
 

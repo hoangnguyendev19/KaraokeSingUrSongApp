@@ -148,6 +148,9 @@ public class HelpRamDomMa {
 		}
 		
 		List<Object> res = em.createNativeQuery(sql).getResultList();
+		if (res.isEmpty()) {
+			return maCot;
+		}
 		for (Object object : res) {
 			maCot.add(object.toString());
 		}

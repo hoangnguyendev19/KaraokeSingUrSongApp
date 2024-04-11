@@ -16,7 +16,6 @@ public class main extends JFrame {
 
 		EventQueue.invokeLater(new Runnable() {
 			private JFrame_DangNhap app;
-			private JFrame_ThuNgan thuNgan;
 
 			public void run() {
 				try {
